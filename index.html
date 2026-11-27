@@ -1,820 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi"><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
-        window.__firebase_config = firebaseConfig;
-        window.__initial_auth_token = initialAuthToken;
-        window.__app_id = appId;
-            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIwMjQ3Njk3NjUxNzE4NjE1NzQxNCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2MwNDQxM2Y3YWFkYjdkMjlfbGUtZGFtLW5nby1zbGlkZXNob3cuaHRtbC02OTQifSwiZXhwIjoxNzk1NjY4NzkxLCJpYXQiOjE3OTU2NjUxOTEsImFsZyI6IlJTMjU2In0.CROevaeQiO3Y2hhY9jretm1g0rSmlwRKLDm5IkYMqQGbPLI1IbpKaxzY0GGIfgHM6465a-kQM1x0wx2XUzXe0vWpIUcH3jqkqe8nP-nJxFC-5cCUVv2fVMY-DXhI5v79nNV7UyV3JKyc9RCIdxoCRBN1wROWq4wRKgYhxXfNxOMC2Iw2Ly93a9iIL77-ha5SEeUsHSs5q5Z4-0K7_rfF2CD8R3e_QcP8LuYKif5AZ8kBBF3TTuQAdyV4fxfsJDne5Lq49fLsG_fIVoBtu-79A-Hepim3UZmkmZPA56nR8XwHusHevi39B70pmosRbRlGMomPfJdNwKFvlC1XSdHVlw","c_c04413f7aadb7d29_le-dam-ngo-slideshow.html-694")</script><script data-bard-client-injected="true">
-  document.addEventListener('input', (event) => {
-    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
-      const clonedDoc = document.cloneNode(true);
-      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
-      injectedScripts.forEach(el => el.remove());
-      window.parent.postMessage({
-        type: 'inlineEdit',
-        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
-      }, '*');
-    }
-  });
-</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const SCROLL_KEYS = new Set([
-    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
-    ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End',
-  ]);
-  const HORIZONTAL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
-
-  function isTextEntryTarget(target) {
-    if (!target) return false;
-    const tagName = target.tagName;
-    return tagName === 'INPUT' || tagName === 'TEXTAREA' ||
-        tagName === 'SELECT' || target.isContentEditable === true;
-  }
-
-  // An element absorbs the key only if it both overflows on the axis being
-  // scrolled and is configured to scroll on that axis. The cheap dimension
-  // test runs first because getComputedStyle forces a style recalc, and this
-  // runs on every keypress. Each axis is read from its own longhand: the
-  // 'overflow' shorthand serializes as two values when the axes differ, which
-  // is the common 'overflow-x: hidden; overflow-y: auto' pane.
-  function canScroll(node, horizontal) {
-    const overflows = horizontal ? node.scrollWidth > node.clientWidth
-                                 : node.scrollHeight > node.clientHeight;
-    if (!overflows) return false;
-    const style = window.getComputedStyle(node);
-    const overflow = horizontal ? style.overflowX : style.overflowY;
-    return overflow === 'auto' || overflow === 'scroll';
-  }
-
-  // Walks up from the event target so nested scrollers keep their behavior.
-  // <body> is included because pages that pin the root height make it the
-  // scroll container.
-  function hasScrollableAncestor(target, horizontal) {
-    let node = target;
-    while (node && node !== document.documentElement) {
-      if (canScroll(node, horizontal)) return true;
-      node = node.parentElement;
-    }
-    return false;
-  }
-
-  function rootCanScroll(horizontal) {
-    const scroller = document.scrollingElement || document.documentElement;
-    if (!scroller) return false;
-    // Tolerate a pixel of rounding so subpixel layouts do not look scrollable.
-    return horizontal ? scroller.scrollWidth > window.innerWidth + 1
-                      : scroller.scrollHeight > window.innerHeight + 1;
-  }
-
-  window.addEventListener('keydown', function(event) {
-    if (!SCROLL_KEYS.has(event.key)) return;
-    if (event.defaultPrevented) return;
-    // Alt and Meta turn arrows into browser history navigation, and Ctrl is
-    // reserved for shortcuts, so none of them are scroll intent.
-    if (event.altKey || event.metaKey || event.ctrlKey) return;
-
-    const target = event.target;
-    if (isTextEntryTarget(target)) return;
-
-    // Anything that can still absorb the scroll gets to keep it.
-    const horizontal = HORIZONTAL_KEYS.has(event.key);
-    if (rootCanScroll(horizontal)) return;
-    if (hasScrollableAncestor(target, horizontal)) return;
-
-    event.preventDefault();
-  }, {capture: true, passive: false});
-})();</script><script data-bard-client-injected="true">(function() {
-  // Ensure this script is executed only once
-  if (window.firebaseAuthBridgeScriptLoaded) {
-    return;
-  }
-  window.firebaseAuthBridgeScriptLoaded = true;
-
-  let nextTokenPromiseId = 0;
-
-  // Stores { resolve, reject } for ongoing token requests
-  const pendingTokenPromises = {};
-
-  // Listen for messages from the Host Application
-  window.addEventListener('message', function(event) {
-
-    const messageData = event.data;
-
-  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
-      const { success, token, error, promiseId } = messageData ?? {};
-      if (pendingTokenPromises[promiseId]) {
-        if (success) {
-          pendingTokenPromises[promiseId].resolve(token);
-        } else {
-          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
-        }
-        delete pendingTokenPromises[promiseId];
-      }
-    }
-  });
-
-  // Expose a function for the Generated App to request a new Firebase token
-  window.requestNewFirebaseToken = function() {
-    const currentPromiseId = nextTokenPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingTokenPromises[currentPromiseId] = { resolve, reject };
-    });
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'REQUEST_NEW_FIREBASE_TOKEN',
-        promiseId: currentPromiseId
-      }, '*');
-    } else {
-      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
-      delete pendingTokenPromises[currentPromiseId];
-    }
-    return promise;
-  };
-})();</script><script data-bard-client-injected="true">
-let realOriginalGetUserMedia = null;
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-}
-
-(function() {
-  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
-    try {
-      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
-        get: function() {
-          return undefined; // Or throw an error
-        },
-        configurable: false
-      });
-    } catch (error) {
-      console.error("Error defining prototype getter:", error);
-    }
-  }
-})();
-
-(function() {
-  const pendingMediaResolvers = {};
-  let nextMediaPromiseId = 0;
-
-  function requestMediaPermissions(constraints) {
-    const mediaPromiseId = nextMediaPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingMediaResolvers[mediaPromiseId] = (granted) => {
-        delete pendingMediaResolvers[mediaPromiseId];
-        resolve(granted);
-      };
-    });
-
-    window.parent.postMessage({
-      type: 'requestMediaPermission',
-      constraints: constraints,
-      promiseId: mediaPromiseId,
-    }, '*');
-
-    return promise;
-  }
-
-  let originalGetUserMedia = realOriginalGetUserMedia;
-
-  function interceptGetUserMedia() {
-    if (navigator.mediaDevices) {
-      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
-        value: function(constraints) {
-          return requestMediaPermissions(constraints).then((granted) => {
-            if (granted) {
-              if (originalGetUserMedia) {
-                return originalGetUserMedia(constraints);
-              } else {
-                throw new Error("Original getUserMedia not available.");
-              }
-            } else {
-              throw new DOMException('Permission denied', 'NotAllowedError');
-            }
-          });
-        },
-        writable: false,
-        configurable: false
-      });
-    }
-  }
-
-  interceptGetUserMedia();
-
-  const observer = new MutationObserver(function(mutationsList, observer) {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'childList' && mutation.addedNodes) {
-        mutation.addedNodes.forEach(node => {
-          if (node === navigator.mediaDevices) {
-            interceptGetUserMedia();
-          }
-        });
-      }
-    }
-  });
-
-  function interceptSpeechRecognition() {
-    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-      return;
-    }
-
-    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    const SpeechRecognitionWrapper = function(...args) {
-      const recognizer = new OriginalSpeechRecognition(...args);
-      const originalStart = recognizer.start.bind(recognizer);
-
-      recognizer.start = function() {
-        requestMediaPermissions({ audio: true }).then(granted => {
-          if (granted) {
-            originalStart();
-          } else {
-            const errorEvent = new SpeechRecognitionErrorEvent('error');
-            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
-            recognizer.dispatchEvent(errorEvent);
-          }
-        });
-      };
-
-      return recognizer;
-    };
-
-    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
-    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
-
-    if (window.SpeechRecognition) {
-      window.SpeechRecognition = SpeechRecognitionWrapper;
-    }
-    if (window.webkitSpeechRecognition) {
-      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
-    }
-  }
-
-  interceptSpeechRecognition();
-
-  window.addEventListener('message', function(event) {
-    if (event.data) {
-      if (event.data.type === 'resolveMediaPermission') {
-        const { promiseId, granted } = event.data;
-        if (pendingMediaResolvers[promiseId]) {
-          pendingMediaResolvers[promiseId](granted);
-        }
-      }
-    }
-  });
-
-})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
-function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
-
- Copyright The Closure Library Authors.
- SPDX-License-Identifier: Apache-2.0
-*/
-function A(b,d){function e(){}e.prototype=d.prototype;b.i=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
-let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
-null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.extensions="";var l=0,t=null,r=null,q=[],F=new TextEncoder,
-G=new TextDecoder;c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*
-16|0;return(f==="x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;
-(g=t)==null||g.postMessage(a)}};Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
-(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
-url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
-</script><script data-bard-client-injected="true">((function(modelInformation) {
-  const originalFetch = window.fetch;
-  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
-  let googleLlmBaseApiUrls = [
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
-  ];
-  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-    );
-  });
-  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-
-  const pendingFetchResolvers = {};
-  let nextPromiseId = 0;
-
-  function handleStringInput(input, optionsArgument) {
-    const actualUrl = input;
-    const fetchCallArgs = [actualUrl, optionsArgument];
-    const effectiveOptions = optionsArgument || {};
-    const bodyForApiKeyCheck = effectiveOptions.body;
-    const bodyForPostMessage = effectiveOptions.body;
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  function handleRequestInput(input, optionsArgument) {
-    const actualUrl = input.url;
-    const fetchCallArgs = [input, optionsArgument];
-    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (optionsArgument) {
-      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
-      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
-      if ('body' in optionsArgument) {
-        bodyForApiKeyCheck = optionsArgument.body;
-        bodyForPostMessage = optionsArgument.body;
-      } else {
-        bodyForApiKeyCheck = undefined;
-        bodyForPostMessage = input.body;
-      }
-    } else {
-      bodyForApiKeyCheck = undefined;
-      bodyForPostMessage = input.body;
-    }
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  window.fetch = function(input, optionsArgument) {
-    let actualUrl;
-    let fetchCallArgs;
-    let effectiveOptions = {};
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (typeof input === 'string') {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
-    } else if (input instanceof Request) {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
-    } else {
-      return originalFetch.apply(window, [input, optionsArgument]);
-    }
-
-    effectiveOptions.method = effectiveOptions.method || 'GET';
-    if (!effectiveOptions.headers) {
-      effectiveOptions.headers = new Headers();
-    }
-
-
-    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
-      let apiKeyIsNull = true;
-
-      const regex = new RegExp("models/([^:]+)");
-      const modelNameMatch = actualUrl.match(regex);
-      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
-
-
-      try {
-        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
-        const apiKeyParam = urlObject.searchParams.get('key');
-        if (apiKeyParam) {
-          apiKeyIsNull = false;
-        }
-      } catch (e) {
-        // Continue checks even if URL parsing fails
-      }
-
-      if (apiKeyIsNull && effectiveOptions.headers) {
-        const h = new Headers(effectiveOptions.headers);
-        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
-        if (apiKeyHeaderValue) {
-          apiKeyIsNull = false;
-          return originalFetch.apply(window, fetchCallArgs);
-        }
-      }
-
-      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
-        try {
-          const bodyData = JSON.parse(bodyForApiKeyCheck);
-          if (bodyData && bodyData.apiKey) {
-            apiKeyIsNull = false;
-            return originalFetch.apply(window, fetchCallArgs);
-          }
-        } catch (e) {
-          // Ignore JSON parsing errors
-        }
-      }
-
-      if(apiKeyIsNull) {
-        const promiseId = nextPromiseId++;
-        const promise = new Promise((resolve) => {
-          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
-            delete pendingFetchResolvers[promiseId];
-            resolve(resolvedResponse);
-          };
-        });
-
-        let serializedBodyForPostMessage;
-        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
-            serializedBodyForPostMessage = bodyForPostMessage;
-        } else if (bodyForPostMessage instanceof ReadableStream) {
-            serializedBodyForPostMessage = null;
-        } else {
-            try {
-                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
-            } catch (e) {
-                serializedBodyForPostMessage = null;
-            }
-        }
-
-        const messageOptions = {
-            method: effectiveOptions.method,
-            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
-            body: serializedBodyForPostMessage
-        };
-
-        window.parent.postMessage({
-          type: 'requestFetch',
-          url: actualUrl,
-          modelName: modelName,
-          options: messageOptions,
-          promiseId: promiseId,
-        }, '*');
-
-        return promise;
-      }
-      return originalFetch.apply(window, fetchCallArgs);
-    }
-    return originalFetch.apply(window, fetchCallArgs);
-  };
-
-  window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'resolveFetch') {
-      const { promiseId, response } = event.data;
-      if (pendingFetchResolvers[promiseId]) {
-        try {
-          const reconstructedResponse = new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers: new Headers(response.headers),
-          });
-          pendingFetchResolvers[promiseId](reconstructedResponse);
-        } catch (error) {
-          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
-        }
-      }
-    }
-  });
-
-}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
-  const OVERLAY_SELECTOR =
-    'dialog[open], [role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"], [role="combobox"]';
-
-  function isVisibleOverlay(element) {
-    if (element.closest('[hidden], [aria-hidden="true"], [inert]')) {
-      return false;
-    }
-    if (window.getComputedStyle(element).visibility === 'hidden') {
-      return false;
-    }
-    for (let cur = element; cur; cur = cur.parentElement) {
-      if (window.getComputedStyle(cur).display === 'none') {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function hasOpenOverlay() {
-    const candidates = document.querySelectorAll(OVERLAY_SELECTOR);
-    for (let i = 0; i < candidates.length; i++) {
-      if (isVisibleOverlay(candidates[i])) {
-        return true;
-      }
-    }
-    try {
-      if (document.querySelector('[popover]:popover-open')) {
-        return true;
-      }
-    } catch (e) {
-      // Ignore engines that do not support :popover-open.
-    }
-    return false;
-  }
-
-  function isNonEmptySearchInput(target) {
-    return (
-      Boolean(target) &&
-      target.tagName === 'INPUT' &&
-      typeof target.type === 'string' &&
-      target.type.toLowerCase() === 'search' &&
-      typeof target.value === 'string' &&
-      target.value.length > 0
-    );
-  }
-
-  function shouldIgnoreEscape(event) {
-    return (
-      event.key !== 'Escape' ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.metaKey ||
-      event.shiftKey ||
-      event.isComposing ||
-      event.repeat ||
-      event.keyCode === 229 ||
-      isNonEmptySearchInput(event.target)
-    );
-  }
-
-  let shouldIgnoreCaptureState = false;
-
-  window.addEventListener(
-    'keydown',
-    function(event) {
-      if (event.key === 'Escape') {
-        shouldIgnoreCaptureState =
-          hasOpenOverlay() || isNonEmptySearchInput(event.target);
-      }
-    },
-    {capture: true},
-  );
-
-  window.addEventListener('keydown', function(event) {
-    if (
-      shouldIgnoreEscape(event) ||
-      event.defaultPrevented ||
-      shouldIgnoreCaptureState
-    ) {
-      return;
-    }
-    const wasBlockedOnCapture = shouldIgnoreCaptureState;
-    queueMicrotask(function() {
-      if (event.defaultPrevented || wasBlockedOnCapture) {
-        return;
-      }
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage({'type': 'escapeKey'}, '*');
-      }
-    });
-  });
-})();</script><script data-bard-client-injected="true">(function() {
-  function normalizeSlug(str) {
-    try {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^p{L}p{N}s_-]/gu, '')
-        .replace(/s+/g, '-');
-    } catch (e) {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9s_-]/g, '')
-        .replace(/s+/g, '-');
-    }
-  }
-
-  function findTargetElement(hash) {
-    if (!hash || hash === '#') {
-      return null;
-    }
-    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
-    let decodedId = rawId;
-    try {
-      decodedId = decodeURIComponent(rawId);
-    } catch (e) {
-      // Ignore URI malformed errors.
-    }
-
-    // 1. Direct ID match (raw and decoded).
-    let target = document.getElementById(rawId) || document.getElementById(decodedId);
-    if (target) {
-      return target;
-    }
-
-    // 2. Name attribute match (<a name="...">).
-    try {
-      if (typeof CSS !== 'undefined' && CSS.escape) {
-        target =
-          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
-          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
-      } else {
-        const namedElements = document.getElementsByName(rawId);
-        if (namedElements && namedElements.length > 0) {
-          return namedElements[0];
-        }
-      }
-    } catch (e) {
-      // Ignore querySelector syntax errors.
-    }
-    if (target) {
-      return target;
-    }
-
-    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
-    const targetSlug = normalizeSlug(decodedId);
-    if (targetSlug) {
-      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
-        if (normalizeSlug(heading.textContent || '') === targetSlug) {
-          return heading;
-        }
-      }
-    }
-
-    return null;
-  }
-
-  document.addEventListener('click', function(event) {
-    const target = event.target;
-    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
-    if (!anchor) {
-      return;
-    }
-
-    const href = anchor.getAttribute('href');
-    if (
-      !href ||
-      href.trim().toLowerCase().startsWith('javascript:') ||
-      anchor.hasAttribute('download')
-    ) {
-      return;
-    }
-
-    // Check if the link is an in-page hash / anchor link.
-    if (href.startsWith('#')) {
-      event.preventDefault();
-      const targetElement = findTargetElement(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-      }
-      return;
-    }
-
-    // Check if the URL has the same origin/pathname but with a hash.
-    try {
-      const url = new URL(anchor.href, window.location.href);
-      if (
-        url.hash &&
-        url.origin === window.location.origin &&
-        url.pathname === window.location.pathname
-      ) {
-        event.preventDefault();
-        const targetElement = findTargetElement(url.hash);
-        if (targetElement) {
-          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-        return;
-      }
-    } catch (e) {
-      // Fall through if URL parsing fails.
-    }
-
-    // For all external or full navigation links, prevent iframe-level navigation
-    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
-    // safely in a new tab/window.
-    if (anchor.target !== '_blank') {
-      event.preventDefault();
-      window.open(anchor.href, '_blank', 'noopener,noreferrer');
-    }
-  }, {capture: true});
-})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const originalConsoleLog = console.log;
-  const originalConsoleError = console.error;
-
-    /**
-   * Normalizes an error event or a promise rejection reason into a structured error object.
-   * @param {*} errorEventOrReason The error object or reason.
-   * @return {object} Structured error data { message, name, stack }.
-   */
-  function getErrorObject(errorEventOrReason) {
-    if (errorEventOrReason instanceof Error) {
-      return {
-        message: errorEventOrReason.message,
-        name: errorEventOrReason.name,
-        stack: errorEventOrReason.stack,
-      };
-    }
-    // Fallback for non-Error objects.
-    try {
-      return {
-        message: JSON.stringify(errorEventOrReason),
-        name: 'UnknownErrorType',
-        stack: null,
-      };
-    } catch (e) {
-      return {
-        message: String(errorEventOrReason),
-        name: 'UnknownErrorTypeNonStringifiable',
-        stack: null,
-      };
-    }
-  }
-
-  /**
-   * Converts an array of arguments (from log/error) into a single string.
-   * Handles Error objects specially to include their message and stack.
-   * @param {Array<*>} args - Arguments passed to console methods.
-   * @return {string} A string representation of the arguments.
-   */
-  function stringifyArgs(args) {
-    return args
-      .map((arg) => {
-        if (arg instanceof Error) {
-          const {message, stack} = arg;
-          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
-        }
-        if (typeof arg === 'object' && arg !== null) {
-          try {
-            return JSON.stringify(arg);
-          } catch (error) {
-            return '[Circular Object]';
-          }
-        } else {
-          return String(arg);
-        }
-      })
-      .join(' ');
-  }
-
-  console.log = function(...args) {
-    const logString = stringifyArgs(args);
-    window.parent.postMessage({ type: 'log', message: logString }, '*');
-    originalConsoleLog.apply(console, args);
-  };
-
-  console.error = function(...args) {
-    let errorData;
-    if (args.length > 0 && args[0] instanceof Error) {
-      const err = args[0];
-      // If the first arg is an Error, capture its details.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        ...getErrorObject(err),
-        rawArgsString: stringifyArgs(args.slice(1)),
-        timestamp: new Date().toISOString(),
-      };
-    } else {
-      // If not an Error object, treat all args as a general error message.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        message: stringifyArgs(args),
-        name: 'ConsoleLoggedError',
-        stack: null,
-        timestamp: new Date().toISOString(),
-      };
-    }
-    window.parent.postMessage(errorData, '*');
-    originalConsoleError.apply(console, args);
-  };
-
-  // Listen for global unhandled synchronous errors.
-  window.addEventListener('error', function(event) {
-    const errorDetails = event.error ? getErrorObject(event.error) : {
-      message: event.message,
-      name: 'GlobalError',
-      stack: null,
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno,
-    };
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'global',
-      ...errorDetails,
-      message: errorDetails.message || event.message,
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-  // Listen for unhandled promise rejections (asynchronous errors).
-  window.addEventListener('unhandledrejection', function(event) {
-    const errorDetails = getErrorObject(event.reason);
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'unhandledrejection',
-      ...errorDetails,
-      message: errorDetails.message || 'Unhandled Promise Rejection',
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-})();</script>
+<html lang="vi" style="--date-scale: 1.00;"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lễ Dạm Ngõ — Trình Chiếu Sang Trọng</title>
@@ -825,7 +10,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
   <!-- Google Fonts hỗ trợ tiếng Việt đầy đủ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Great+Vibes&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Great+Vibes&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&amp;display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
@@ -859,6 +44,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       --ctrl-border: rgba(244, 182, 200, 0.42);
       --ctrl-text: #fff3f6;
       --particle-color: 244, 169, 188;
+      --watermark-color: rgba(226, 146, 162, 0.22);
     }
 
     /* THEME 2: ĐỎ NHUNG HOÀNG GIA — ROYAL CRIMSON */
@@ -888,6 +74,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       --ctrl-border: rgba(230, 195, 115, 0.42);
       --ctrl-text: #f7e3a8;
       --particle-color: 247, 224, 158;
+      --watermark-color: rgba(230, 195, 115, 0.11);
     }
 
     /* THEME 3: KEM NGÀ THANH LỊCH — ELEGANT IVORY */
@@ -917,6 +104,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       --ctrl-border: rgba(212, 164, 55, 0.45);
       --ctrl-text: #fdf4e3;
       --particle-color: 196, 150, 48;
+      --watermark-color: rgba(184, 134, 11, 0.13);
     }
 
     /* ==========================================================================
@@ -1209,11 +397,42 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
     /* Kiểu bố cục tên Cô Dâu & Chú Rể (Căn giữa / Đan xen so le) */
     .couple-names-wrap {
+      position: relative;
       width: 100%;
       max-width: min(92vw, 1280px);
     }
 
-    .couple-names-wrap .name-line {
+    /* Biểu tượng Song Hỷ tròn mờ đằng sau tên Cô Dâu & Chú Rể */
+    .main-watermark-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(230px, 42vh, 450px);
+      height: clamp(230px, 42vh, 450px);
+      color: var(--watermark-color);
+      pointer-events: none;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main-watermark-svg {
+      width: 100%;
+      height: 100%;
+      animation: watermarkBreathe 8s ease-in-out infinite;
+    }
+
+    @keyframes watermarkBreathe {
+      0%, 100% { transform: scale(1); opacity: 0.92; }
+      50% { transform: scale(1.03); opacity: 1; }
+    }
+
+    .couple-names-wrap .name-line,
+    .couple-names-wrap .amp-line {
+      position: relative;
+      z-index: 1;
       transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -1223,6 +442,92 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
     .couple-names-wrap.layout-staggered .name-bottom {
       transform: translateX(clamp(28px, 11vw, 185px));
+    }
+
+    /* Giao diện Ngày Tháng kiểu lịch có 2 đường kẻ ngang (giống mẫu) */
+    .date-calendar-ui {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-title);
+      width: min(94vw, calc(900px * var(--date-scale, 1)));
+      font-family: 'Lora', 'Cormorant Garamond', serif;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-feature-settings: "lnum" 1, "onum" 0;
+    }
+
+    .date-cal-month {
+      font-family: 'Lora', 'Cormorant Garamond', serif;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-feature-settings: "lnum" 1, "onum" 0;
+      font-size: calc(clamp(24px, 2.8vw, 42px) * var(--date-scale, 1));
+      letter-spacing: 0.14em;
+      font-weight: 500;
+      line-height: 1.15;
+      margin-bottom: clamp(6px, 1vh, 12px);
+    }
+
+    .date-cal-middle {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(14px, 2.4vw, 34px);
+      width: 100%;
+    }
+
+    .date-cal-side {
+      font-family: 'Lora', 'Cormorant Garamond', serif;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-feature-settings: "lnum" 1, "onum" 0;
+      border-top: 1.5px solid var(--text-secondary);
+      border-bottom: 1.5px solid var(--text-secondary);
+      padding: clamp(7px, 1.1vh, 12px) clamp(10px, 1.8vw, 24px);
+      font-size: calc(clamp(22px, 2.6vw, 38px) * var(--date-scale, 1));
+      font-weight: 500;
+      line-height: 1.25;
+      white-space: nowrap;
+      text-align: center;
+      color: var(--text-title);
+    }
+
+    .date-cal-day {
+      font-family: 'Lora', 'Cormorant Garamond', serif;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-feature-settings: "lnum" 1, "onum" 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(clamp(54px, 6.8vw, 102px) * var(--date-scale, 1));
+      font-weight: 500;
+      line-height: 1;
+      padding: 0 0.1em 0 0.04em;
+      transform: translateY(-0.03em);
+      color: var(--text-title);
+    }
+
+    .date-cal-year {
+      font-family: 'Lora', 'Cormorant Garamond', serif;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-feature-settings: "lnum" 1, "onum" 0;
+      font-size: calc(clamp(26px, 3vw, 46px) * var(--date-scale, 1));
+      letter-spacing: 0.14em;
+      font-weight: 500;
+      line-height: 1.15;
+      margin-top: clamp(6px, 1vh, 12px);
+    }
+
+    .date-classic-solar {
+      font-size: calc(clamp(24px, 3vw, 46px) * var(--date-scale, 1));
+      font-variant-numeric: lining-nums tabular-nums;
+      color: var(--text-secondary);
+    }
+
+    .date-classic-lunar {
+      font-family: 'Lora', 'Cormorant Garamond', serif;
+      font-variant-numeric: lining-nums tabular-nums;
+      font-feature-settings: "lnum" 1, "onum" 0;
+      font-size: calc(clamp(21px, 2.4vw, 36px) * var(--date-scale, 1));
+      color: var(--text-muted);
     }
 
     /* ==========================================================================
@@ -1457,8 +762,39 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* Nút nổi bật nhạc nhanh dành cho trình duyệt TV khi bị chặn tự phát (Autoplay) */
+    #tvMusicBanner {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      z-index: 35;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px 10px 18px;
+      border-radius: 9999px;
+      background: var(--ctrl-bg);
+      border: 1px solid var(--ctrl-border);
+      color: var(--ctrl-text);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+    }
+
+    #tvMusicBanner.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
   </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-1{margin-left:0.25rem;margin-right:0.25rem}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.my-auto{margin-top:auto;margin-bottom:auto}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2\.5{margin-bottom:0.625rem}.mt-0\.5{margin-top:0.125rem}.mb-3{margin-bottom:0.75rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.\!h-\[34px\]{height:34px !important}.h-5{height:1.25rem}.h-7{height:1.75rem}.h-\[1\.5px\]{height:1.5px}.w-7{width:1.75rem}.w-full{width:100%}.w-px{width:1px}.w-28{width:7rem}.\!min-w-\[34px\]{min-width:34px !important}.max-w-4xl{max-width:56rem}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-1{gap:0.25rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-amber-200\/25{border-color:rgb(253 230 138 / 0.25)}.border-amber-700{--tw-border-opacity:1;border-color:rgb(180 83 9 / var(--tw-border-opacity, 1))}.border-pink-200\/15{border-color:rgb(251 207 232 / 0.15)}.border-pink-200\/20{border-color:rgb(251 207 232 / 0.2)}.border-pink-200\/25{border-color:rgb(251 207 232 / 0.25)}.border-pink-300{--tw-border-opacity:1;border-color:rgb(249 168 212 / var(--tw-border-opacity, 1))}.border-pink-300\/50{border-color:rgb(249 168 212 / 0.5)}.border-pink-300\/60{border-color:rgb(249 168 212 / 0.6)}.border-rose-300{--tw-border-opacity:1;border-color:rgb(253 164 175 / var(--tw-border-opacity, 1))}.bg-\[\#a6264b\]\/15{background-color:rgb(166 38 75 / 0.15)}.bg-pink-300\/10{background-color:rgb(249 168 212 / 0.1)}.bg-pink-300\/25{background-color:rgb(249 168 212 / 0.25)}.bg-white\/25{background-color:rgb(255 255 255 / 0.25)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#5a0814\]{--tw-gradient-from:#5a0814 var(--tw-gradient-from-position);--tw-gradient-to:rgb(90 8 20 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#8c1528\]{--tw-gradient-from:#8c1528 var(--tw-gradient-from-position);--tw-gradient-to:rgb(140 21 40 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#b83358\]{--tw-gradient-from:#b83358 var(--tw-gradient-from-position);--tw-gradient-to:rgb(184 51 88 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#fdfbf7\]{--tw-gradient-from:#fdfbf7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(253 251 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#fff5f7\]{--tw-gradient-from:#fff5f7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 245 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#ffffff\]{--tw-gradient-from:#ffffff var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 255 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#f9c6d3\]{--tw-gradient-to:rgb(249 198 211 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f9c6d3 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#34040a\]{--tw-gradient-to:#34040a var(--tw-gradient-to-position)}.to-\[\#a6264b\]{--tw-gradient-to:#a6264b var(--tw-gradient-to-position)}.to-\[\#b8860b\]{--tw-gradient-to:#b8860b var(--tw-gradient-to-position)}.to-\[\#d45d7e\]{--tw-gradient-to:#d45d7e var(--tw-gradient-to-position)}.to-\[\#e6c373\]{--tw-gradient-to:#e6c373 var(--tw-gradient-to-position)}.to-\[\#efe3cd\]{--tw-gradient-to:#efe3cd var(--tw-gradient-to-position)}.to-\[\#f8dde5\]{--tw-gradient-to:#f8dde5 var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-7{padding:1.75rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.pb-4{padding-bottom:1rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-\[10\.5px\]{font-size:10.5px}.text-\[10px\]{font-size:10px}.text-\[11\.5px\]{font-size:11.5px}.text-\[11px\]{font-size:11px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.tracking-wider{letter-spacing:0.05em}.tracking-\[0\.22em\]{letter-spacing:0.22em}.tracking-\[0\.24em\]{letter-spacing:0.24em}.tracking-\[0\.26em\]{letter-spacing:0.26em}.tracking-\[0\.2em\]{letter-spacing:0.2em}.text-\[\#6b0f1a\]{--tw-text-opacity:1;color:rgb(107 15 26 / var(--tw-text-opacity, 1))}.text-\[\#6b0f1a\]\/75{color:rgb(107 15 26 / 0.75)}.text-\[\#9e2a4b\]{--tw-text-opacity:1;color:rgb(158 42 75 / var(--tw-text-opacity, 1))}.text-\[\#9e4760\]{--tw-text-opacity:1;color:rgb(158 71 96 / var(--tw-text-opacity, 1))}.text-\[\#a6264b\]{--tw-text-opacity:1;color:rgb(166 38 75 / var(--tw-text-opacity, 1))}.text-amber-100\/70{color:rgb(254 243 199 / 0.7)}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-pink-100{--tw-text-opacity:1;color:rgb(252 231 243 / var(--tw-text-opacity, 1))}.text-pink-100\/50{color:rgb(252 231 243 / 0.5)}.text-pink-100\/60{color:rgb(252 231 243 / 0.6)}.text-pink-100\/65{color:rgb(252 231 243 / 0.65)}.text-pink-100\/70{color:rgb(252 231 243 / 0.7)}.text-pink-100\/80{color:rgb(252 231 243 / 0.8)}.text-pink-200{--tw-text-opacity:1;color:rgb(251 207 232 / var(--tw-text-opacity, 1))}.text-pink-200\/80{color:rgb(251 207 232 / 0.8)}.text-pink-200\/90{color:rgb(251 207 232 / 0.9)}.text-pink-300{--tw-text-opacity:1;color:rgb(249 168 212 / var(--tw-text-opacity, 1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-\[\#7c374c\]\/85{color:rgb(124 55 76 / 0.85)}.text-\[\#8f2242\]{--tw-text-opacity:1;color:rgb(143 34 66 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.accent-pink-400{accent-color:#f472b6}.opacity-80{opacity:0.8}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-rose-950\/40{--tw-shadow-color:rgb(76 5 25 / 0.4);--tw-shadow:var(--tw-shadow-colored)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-pink-300\/20:hover{background-color:rgb(249 168 212 / 0.2)}.hover\:text-rose-200:hover{--tw-text-opacity:1;color:rgb(254 205 211 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:brightness-105:hover{--tw-brightness:brightness(1.05);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.active\:scale-\[0\.99\]:active{--tw-scale-x:0.99;--tw-scale-y:0.99;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:inline{display:inline}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:p-10{padding:2.5rem}.md\:p-8{padding:2rem}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-base{font-size:1rem;line-height:1.5rem}}</style></head>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-1{margin-left:0.25rem;margin-right:0.25rem}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.my-auto{margin-top:auto;margin-bottom:auto}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2\.5{margin-bottom:0.625rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mb-3{margin-bottom:0.75rem}.mt-2{margin-top:0.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.\!h-\[34px\]{height:34px !important}.\!h-\[38px\]{height:38px !important}.h-2{height:0.5rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-\[1\.5px\]{height:1.5px}.max-h-32{max-height:8rem}.w-2{width:0.5rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-full{width:100%}.w-px{width:1px}.w-28{width:7rem}.w-4{width:1rem}.\!min-w-\[34px\]{min-width:34px !important}.\!min-w-\[38px\]{min-width:38px !important}.min-w-0{min-width:0px}.max-w-4xl{max-width:56rem}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-1{gap:0.25rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-amber-200\/25{border-color:rgb(253 230 138 / 0.25)}.border-amber-700{--tw-border-opacity:1;border-color:rgb(180 83 9 / var(--tw-border-opacity, 1))}.border-pink-200\/10{border-color:rgb(251 207 232 / 0.1)}.border-pink-200\/15{border-color:rgb(251 207 232 / 0.15)}.border-pink-200\/20{border-color:rgb(251 207 232 / 0.2)}.border-pink-200\/25{border-color:rgb(251 207 232 / 0.25)}.border-pink-300{--tw-border-opacity:1;border-color:rgb(249 168 212 / var(--tw-border-opacity, 1))}.border-pink-300\/35{border-color:rgb(249 168 212 / 0.35)}.border-pink-300\/50{border-color:rgb(249 168 212 / 0.5)}.border-pink-300\/60{border-color:rgb(249 168 212 / 0.6)}.border-rose-300{--tw-border-opacity:1;border-color:rgb(253 164 175 / var(--tw-border-opacity, 1))}.border-pink-300\/40{border-color:rgb(249 168 212 / 0.4)}.bg-\[\#a6264b\]\/15{background-color:rgb(166 38 75 / 0.15)}.bg-pink-200\/40{background-color:rgb(251 207 232 / 0.4)}.bg-pink-300\/10{background-color:rgb(249 168 212 / 0.1)}.bg-pink-300\/25{background-color:rgb(249 168 212 / 0.25)}.bg-white\/25{background-color:rgb(255 255 255 / 0.25)}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.bg-pink-400\/25{background-color:rgb(244 114 182 / 0.25)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#5a0814\]{--tw-gradient-from:#5a0814 var(--tw-gradient-from-position);--tw-gradient-to:rgb(90 8 20 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#8c1528\]{--tw-gradient-from:#8c1528 var(--tw-gradient-from-position);--tw-gradient-to:rgb(140 21 40 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#b83358\]{--tw-gradient-from:#b83358 var(--tw-gradient-from-position);--tw-gradient-to:rgb(184 51 88 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#fdfbf7\]{--tw-gradient-from:#fdfbf7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(253 251 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#fff5f7\]{--tw-gradient-from:#fff5f7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 245 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-\[\#ffffff\]{--tw-gradient-from:#ffffff var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 255 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#f9c6d3\]{--tw-gradient-to:rgb(249 198 211 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f9c6d3 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#34040a\]{--tw-gradient-to:#34040a var(--tw-gradient-to-position)}.to-\[\#a6264b\]{--tw-gradient-to:#a6264b var(--tw-gradient-to-position)}.to-\[\#b8860b\]{--tw-gradient-to:#b8860b var(--tw-gradient-to-position)}.to-\[\#d45d7e\]{--tw-gradient-to:#d45d7e var(--tw-gradient-to-position)}.to-\[\#e6c373\]{--tw-gradient-to:#e6c373 var(--tw-gradient-to-position)}.to-\[\#efe3cd\]{--tw-gradient-to:#efe3cd var(--tw-gradient-to-position)}.to-\[\#f8dde5\]{--tw-gradient-to:#f8dde5 var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-7{padding:1.75rem}.p-8{padding:2rem}.\!px-0{padding-left:0px !important;padding-right:0px !important}.\!px-2{padding-left:0.5rem !important;padding-right:0.5rem !important}.\!px-2\.5{padding-left:0.625rem !important;padding-right:0.625rem !important}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.pb-4{padding-bottom:1rem}.pt-0\.5{padding-top:0.125rem}.pt-1{padding-top:0.25rem}.pt-1\.5{padding-top:0.375rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-\[10\.5px\]{font-size:10.5px}.text-\[10px\]{font-size:10px}.text-\[11\.5px\]{font-size:11.5px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-wider{letter-spacing:0.05em}.tracking-\[0\.22em\]{letter-spacing:0.22em}.tracking-\[0\.24em\]{letter-spacing:0.24em}.tracking-\[0\.26em\]{letter-spacing:0.26em}.tracking-\[0\.2em\]{letter-spacing:0.2em}.text-\[\#6b0f1a\]{--tw-text-opacity:1;color:rgb(107 15 26 / var(--tw-text-opacity, 1))}.text-\[\#6b0f1a\]\/75{color:rgb(107 15 26 / 0.75)}.text-\[\#9e2a4b\]{--tw-text-opacity:1;color:rgb(158 42 75 / var(--tw-text-opacity, 1))}.text-\[\#9e4760\]{--tw-text-opacity:1;color:rgb(158 71 96 / var(--tw-text-opacity, 1))}.text-\[\#a6264b\]{--tw-text-opacity:1;color:rgb(166 38 75 / var(--tw-text-opacity, 1))}.text-amber-100\/70{color:rgb(254 243 199 / 0.7)}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-pink-100{--tw-text-opacity:1;color:rgb(252 231 243 / var(--tw-text-opacity, 1))}.text-pink-100\/50{color:rgb(252 231 243 / 0.5)}.text-pink-100\/55{color:rgb(252 231 243 / 0.55)}.text-pink-100\/60{color:rgb(252 231 243 / 0.6)}.text-pink-100\/65{color:rgb(252 231 243 / 0.65)}.text-pink-100\/70{color:rgb(252 231 243 / 0.7)}.text-pink-100\/75{color:rgb(252 231 243 / 0.75)}.text-pink-100\/80{color:rgb(252 231 243 / 0.8)}.text-pink-100\/90{color:rgb(252 231 243 / 0.9)}.text-pink-200{--tw-text-opacity:1;color:rgb(251 207 232 / var(--tw-text-opacity, 1))}.text-pink-200\/70{color:rgb(251 207 232 / 0.7)}.text-pink-200\/80{color:rgb(251 207 232 / 0.8)}.text-pink-200\/85{color:rgb(251 207 232 / 0.85)}.text-pink-200\/90{color:rgb(251 207 232 / 0.9)}.text-pink-300{--tw-text-opacity:1;color:rgb(249 168 212 / var(--tw-text-opacity, 1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-\[\#7c374c\]\/85{color:rgb(124 55 76 / 0.85)}.text-\[\#8f2242\]{--tw-text-opacity:1;color:rgb(143 34 66 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.accent-pink-400{accent-color:#f472b6}.opacity-80{opacity:0.8}.opacity-70{opacity:0.7}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-rose-950\/40{--tw-shadow-color:rgb(76 5 25 / 0.4);--tw-shadow:var(--tw-shadow-colored)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-pink-300\/20:hover{background-color:rgb(249 168 212 / 0.2)}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:bg-white\/15:hover{background-color:rgb(255 255 255 / 0.15)}.hover\:text-rose-200:hover{--tw-text-opacity:1;color:rgb(254 205 211 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-90:hover{opacity:0.9}.hover\:brightness-105:hover{--tw-brightness:brightness(1.05);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.active\:scale-\[0\.99\]:active{--tw-scale-x:0.99;--tw-scale-y:0.99;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-40:disabled{opacity:0.4}@media (min-width: 640px){.sm\:inline{display:inline}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:p-10{padding:2.5rem}.md\:p-8{padding:2rem}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-base{font-size:1rem;line-height:1.5rem}}</style></head>
 
 <body data-theme="sakura-blush" class="">
   <!-- ======================================================================
@@ -1729,7 +1065,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     <div id="slidesContainer" class="slide-container"></div>
 
     <!-- 4. CANVAS CÁNH HOA ANH ĐÀO RƠI & BỤI VÀNG (PHỦ TRÊN CÙNG, POINTER-EVENTS NONE) -->
-    <canvas id="ambientCanvas" width="948" height="828"></canvas>
+    <canvas id="ambientCanvas" width="1176" height="743"></canvas>
 
     <!-- 5. THANH TIẾN TRÌNH SIÊU MẢNH -->
     <div id="progressTrack">
@@ -1759,14 +1095,14 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
     <span class="w-px h-5 bg-white/25 mx-1"></span>
 
-    <button id="btnLockMain" class="ctrl-btn" title="Khóa ở Slide 1 làm Phông Chính suốt buổi lễ">
+    <button id="btnLockMain" class="ctrl-btn active-mode" title="Khóa ở Slide 1 làm Phông Chính suốt buổi lễ">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
       <span class="hidden sm:inline">Khóa Phông Chính</span>
     </button>
 
-    <button id="btnMusic" class="ctrl-btn" title="Bật / Tắt nhạc nền">
-      <svg id="iconMusicOff" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle><line x1="2" y1="2" x2="22" y2="22"></line></svg>
-      <svg id="iconMusicOn" class="hidden" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+    <button id="btnMusic" class="ctrl-btn active-mode" title="Bật / Tắt nhạc nền">
+      <svg id="iconMusicOff" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle><line x1="2" y1="2" x2="22" y2="22"></line></svg>
+      <svg id="iconMusicOn" class="" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
     </button>
 
     <button id="btnFullscreen" class="ctrl-btn" title="Toàn màn hình chiếu TV (Phím F)">
@@ -1861,22 +1197,81 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <button type="button" data-name-layout="staggered" class="name-layout-btn py-2 rounded-lg border border-pink-300 bg-pink-300/25 text-pink-100 font-medium text-xs transition">Đan xen (So le)</button>
           </div>
         </div>
-        <div>
-          <span class="block text-xs text-pink-100/70 mb-1">Ngày Dương Lịch</span>
-          <input id="inputSolarDate" type="text" class="drawer-input">
+        <div class="flex items-center justify-between py-1">
+          <span class="text-xs text-pink-100/80">Biểu tượng Song Hỷ mờ sau tên</span>
+          <label class="inline-flex items-center gap-1.5 text-[11px] text-pink-200/85 cursor-pointer">
+            <input id="toggleWatermark" type="checkbox" checked="" class="accent-pink-400 cursor-pointer">
+            <span>Hiển thị</span>
+          </label>
         </div>
         <div>
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs text-pink-100/70">Ngày Âm Lịch</span>
-            <label class="inline-flex items-center gap-1.5 text-[11px] text-pink-200/80 cursor-pointer">
-              <input id="toggleLunarDate" type="checkbox" class="accent-pink-400 cursor-pointer">
-              <span>Hiển thị</span>
-            </label>
+          <span class="block text-xs text-pink-100/70 mb-1.5">Kiểu hiển thị ngày tháng</span>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" data-date-style="calendar" class="date-style-btn py-2 rounded-lg border text-xs transition border-pink-300 bg-pink-300/25 text-pink-100 font-medium">Lịch ngang (Mẫu mới)</button>
+            <button type="button" data-date-style="classic" class="date-style-btn py-2 rounded-lg border text-xs hover:bg-pink-300/20 transition border-pink-200/25">1 dòng đơn giản</button>
           </div>
-          <input id="inputLunarDate" type="text" class="drawer-input">
+        </div>
+
+        <!-- Nhập ngày kiểu Lịch ngang (Tháng / Thứ - Ngày - Âm lịch / Năm) -->
+        <div id="calendarDateFields" class="space-y-2.5 p-3 rounded-xl bg-white/5 border border-pink-200/15">
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <span class="block text-[11px] text-pink-100/70 mb-1">Tháng</span>
+              <input id="inputDateMonth" type="text" class="drawer-input" placeholder="THÁNG 12">
+            </div>
+            <div>
+              <span class="block text-[11px] text-pink-100/70 mb-1">Ngày</span>
+              <input id="inputDateDay" type="text" class="drawer-input" placeholder="20">
+            </div>
+            <div>
+              <span class="block text-[11px] text-pink-100/70 mb-1">Năm</span>
+              <input id="inputDateYear" type="text" class="drawer-input" placeholder="2026">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <span class="block text-[11px] text-pink-100/70 mb-1">Thứ (bên trái)</span>
+              <input id="inputDateWeekday" type="text" class="drawer-input" placeholder="Chủ Nhật">
+            </div>
+            <div>
+              <span class="block text-[11px] text-pink-100/70 mb-1">Âm lịch (bên phải)</span>
+              <input id="inputDateLunarShort" type="text" class="drawer-input" placeholder="12.11 (Bính Ngọ)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Nhập ngày kiểu 1 dòng đơn giản -->
+        <div id="classicDateFields" class="space-y-2.5 hidden">
+          <div>
+            <span class="block text-xs text-pink-100/70 mb-1">Ngày Dương Lịch</span>
+            <input id="inputSolarDate" type="text" class="drawer-input">
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-pink-100/70">Ngày Âm Lịch</span>
+              <label class="inline-flex items-center gap-1.5 text-[11px] text-pink-200/80 cursor-pointer">
+                <input id="toggleLunarDate" type="checkbox" class="accent-pink-400 cursor-pointer">
+                <span>Hiển thị</span>
+              </label>
+            </div>
+            <input id="inputLunarDate" type="text" class="drawer-input">
+          </div>
+        </div>
+        <!-- Thanh trượt ngang chỉnh cỡ font chữ ngày tháng -->
+        <div class="pt-1">
+          <div class="flex items-center justify-between text-xs text-pink-100/80 mb-1.5">
+            <span>Cỡ chữ ngày tháng</span>
+            <span id="dateFontScaleLabel" class="font-semibold text-pink-200">100%</span>
+          </div>
+          <input id="inputDateFontScale" type="range" min="70" max="160" step="5" value="100" class="w-full accent-pink-400 cursor-pointer">
+          <div class="flex justify-between text-[10.5px] text-pink-100/50 mt-0.5">
+            <span>Nhỏ (70%)</span>
+            <span>Mặc định (100%)</span>
+            <span>Rất to (160%)</span>
+          </div>
         </div>
         <div>
-          <span class="block text-xs text-pink-100/70 mb-1">Câu trích dẫn (Tagline)</span>
+          <span class="block text-xs text-pink-100/70 mb-1">Câu trích dẫn (Tagline — để trống nếu muốn ẩn)</span>
           <input id="inputTagline" type="text" class="drawer-input">
         </div>
       </section>
@@ -1930,58 +1325,129 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       <!-- 5. Nhạc Nền -->
       <section class="space-y-2.5 pt-3 border-t border-pink-200/15">
         <label class="block text-xs uppercase tracking-wider text-pink-200/90 font-semibold">
-          5. Nhạc nền buổi lễ
-        </label>
-        <label class="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl border border-dashed border-pink-300/50 bg-pink-300/10 hover:bg-pink-300/20 text-pink-100 cursor-pointer transition text-xs font-medium">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
-          <span>Tải file nhạc riêng (.mp3 / .m4a)</span>
-          <input id="inputAudio" type="file" accept="audio/*" class="hidden">
-        </label>
-        <p id="audioFileName" class="text-[11.5px] text-pink-100/65">
-          Đang dùng: Nhạc piano / hộp nhạc lãng mạn tích hợp sẵn (bấm biểu tượng loa để phát).
-        </p>
-      </section>
-
-      <!-- 6. Hiệu ứng hoa rơi & Tốc độ -->
-      <section class="space-y-3.5 pt-3 border-t border-pink-200/15 pb-4">
-        <label class="block text-xs uppercase tracking-wider text-pink-200/90 font-semibold">
-          6. Hiệu ứng &amp; Tốc độ chuyển slide
+          5. Nhạc nền buổi lễ (Playlist MP3)
         </label>
 
-        <div>
-          <span class="block text-xs text-pink-100/70 mb-1.5">Mật độ cánh hoa rơi / hiệu ứng nền</span>
-          <div class="grid grid-cols-3 gap-2">
-            <button type="button" data-density="low" class="density-btn py-2 rounded-lg border border-pink-200/25 text-xs hover:bg-pink-300/20 transition">Nhẹ</button>
-            <button type="button" data-density="medium" class="density-btn py-2 rounded-lg border border-pink-300 bg-pink-300/25 text-pink-100 font-medium text-xs transition">Vừa</button>
-            <button type="button" data-density="high" class="density-btn py-2 rounded-lg border border-pink-200/25 text-xs hover:bg-pink-300/20 transition">Nhiều</button>
+        <!-- Mini Player điều khiển nhạc & tua playlist -->
+        <div class="p-3 rounded-xl bg-white/5 border border-pink-200/20 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <div id="playerTrackTitle" class="text-xs font-medium text-pink-100 truncate">nhac-nen.mp3</div>
+              <div id="playerTrackMeta" class="text-[11px] text-pink-100/55">Bài 1 / 1 • Thư mục web</div>
+            </div>
+            <span id="playerTimeDisplay" class="text-[11px] font-mono text-pink-200/80 shrink-0">02:27 / 61:41</span>
           </div>
+
+          <!-- Thanh tua thời gian trong bài -->
+          <input id="audioSeekBar" type="range" min="0" max="3701.51619" step="0.1" value="0" class="w-full accent-pink-400 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Tua thời gian bài hát">
+
+          <!-- Các nút điều khiển: Bài trước | Tua lùi 10s | Phát/Dừng | Tua tiếp 10s | Bài tiếp -->
+          <div class="flex items-center justify-between gap-1.5 pt-0.5">
+            <button id="btnAudioPrev" type="button" class="ctrl-btn !h-[34px] !min-w-[34px] !px-2 bg-white/5 hover:bg-white/15" title="Bài trước trong playlist">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+            </button>
+
+            <button id="btnAudioRewind" type="button" class="ctrl-btn !h-[34px] !px-2.5 bg-white/5 hover:bg-white/15 text-[11px]" title="Tua lùi 10 giây">
+              -10s
+            </button>
+
+            <button id="btnAudioPlayPause" type="button" class="ctrl-btn !h-[38px] !min-w-[38px] !px-0 bg-gradient-to-r from-[#b83358] to-[#d45d7e] text-white shadow-md hover:brightness-110" title="Phát / Tạm dừng nhạc">
+              <svg id="iconPlayerPlay" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="hidden"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+              <svg id="iconPlayerPause" class="" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            </button>
+
+            <button id="btnAudioForward" type="button" class="ctrl-btn !h-[34px] !px-2.5 bg-white/5 hover:bg-white/15 text-[11px]" title="Tua tiếp 10 giây">
+              +10s
+            </button>
+
+            <button id="btnAudioNext" type="button" class="ctrl-btn !h-[34px] !min-w-[34px] !px-2 bg-white/5 hover:bg-white/15" title="Bài tiếp theo trong playlist">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+            </button>
+          </div>
+
+          <!-- Âm lượng -->
+          <div class="flex items-center gap-2 pt-1 border-t border-pink-200/10">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-pink-200/70 shrink-0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <input id="audioVolumeBar" type="range" min="0" max="100" step="1" value="85" class="w-full accent-pink-400 cursor-pointer" aria-label="Âm lượng nhạc nền">
+            <span id="audioVolumeLabel" class="text-[11px] text-pink-100/70 w-8 text-right shrink-0">85%</span>
+          </div>
+
+          <!-- Danh sách bài hát trong Playlist -->
+          <div id="audioPlaylistUI" class="max-h-32 overflow-y-auto custom-scroll space-y-1 pt-1.5 border-t border-pink-200/10 hidden"></div>
         </div>
 
         <div>
-          <div class="flex items-center justify-between text-xs text-pink-100/80 mb-1.5">
+          <span class="block text-xs text-pink-100/70 mb-1">Danh sách file nhạc cùng thư mục (phân cách bằng dấu phẩy)</span>
+          <input id="inputExternalAudio" type="text" class="drawer-input" placeholder="nhac-nen.mp3, bai-2.mp3">
+          <p class="text-[11px] text-pink-100/55 mt-1 leading-relaxed">
+            Đặt 1 hoặc nhiều file nhạc (vd: <code class="text-pink-200">bai-1.mp3, bai-2.mp3</code>) cùng thư mục với <code class="text-pink-200">index.html</code> khi tải lên web.
+          </p>
+        </div>
+        <label class="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl border border-dashed border-pink-300/50 bg-pink-300/10 hover:bg-pink-300/20 text-pink-100 cursor-pointer transition text-xs font-medium">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          <span>Chọn nhiều file nhạc từ máy (.mp3 / .m4a)</span>
+          <input id="inputAudio" type="file" accept="audio/*" multiple="" class="hidden">
+        </label>
+        <div class="flex items-center justify-between gap-2">
+          <p id="audioFileName" class="text-[11.5px] text-pink-100/65 truncate">Đã nhận 1 bài nhạc từ thư mục web</p>
+          <button id="btnClearPlaylist" type="button" class="hidden text-xs text-rose-300 hover:text-rose-200 underline shrink-0">
+            Xóa playlist
+          </button>
+        </div>
+      </section>
+
+      <!-- 6. Tốc độ chuyển slide & Mật độ hoa rơi -->
+      <section class="space-y-3 pt-3 border-t border-pink-200/15">
+        <label class="block text-xs uppercase tracking-wider text-pink-200/90 font-semibold">
+          6. Hiệu ứng &amp; Tốc độ chuyển slide
+        </label>
+        <div>
+          <span class="block text-xs text-pink-100/70 mb-1.5">Mật độ hoa anh đào rơi</span>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" data-density="low" class="density-btn py-1.5 rounded-lg border border-pink-200/25 text-xs hover:bg-pink-300/20 transition">Nhẹ</button>
+            <button type="button" data-density="medium" class="density-btn py-1.5 rounded-lg border border-pink-300 bg-pink-300/25 text-pink-100 font-medium text-xs transition">Vừa</button>
+            <button type="button" data-density="high" class="density-btn py-1.5 rounded-lg border border-pink-200/25 text-xs hover:bg-pink-300/20 transition">Nhiều</button>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between text-xs text-pink-100/75 mb-1">
             <span>Thời gian mỗi slide</span>
             <span id="durationLabel" class="font-semibold text-pink-200">8 giây</span>
           </div>
           <input id="inputDuration" type="range" min="5" max="20" step="1" value="8" class="w-full accent-pink-400 cursor-pointer">
-          <div class="flex justify-between text-[10.5px] text-pink-100/50 mt-0.5">
-            <span>5 giây</span>
-            <span>12 giây</span>
-            <span>20 giây</span>
-          </div>
         </div>
       </section>
 
       <!-- 7. Lưu cấu hình đi cùng file dự án -->
       <section class="space-y-2.5 pt-3 border-t border-pink-200/15 pb-4">
         <label class="block text-xs uppercase tracking-wider text-pink-200/90 font-semibold">
-          7. Lưu cấu hình vào file dự án
+          7. Tự động lưu vào file dự án (.html)
         </label>
         <p class="text-[11.5px] text-pink-100/70 leading-relaxed">
-          Đóng gói toàn bộ thông tin, chủ đề và ảnh kỷ niệm hiện tại vào thẳng file <code class="text-pink-200">.html</code> mới để mang sang máy khác vẫn giữ nguyên mặc định.
+          Bấm liên kết chọn đúng file <code class="text-pink-200">.html</code> này <strong>1 lần duy nhất</strong> (trên Chrome / Edge). Sau đó mỗi khi sửa tên, ngày tháng hay ảnh, hệ thống sẽ <strong>tự động ghi đè trực tiếp vào file</strong>.
         </p>
-        <button id="btnExportHtml" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-[#b83358] to-[#d45d7e] hover:brightness-110 active:scale-[0.99] text-white font-medium text-xs shadow-lg shadow-rose-950/40 flex items-center justify-center gap-2 transition cursor-pointer" disabled="">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          <span>Tải file HTML (Kèm cấu hình &amp; ảnh)</span>
+
+        <!-- Trạng thái tự động lưu -->
+        <div id="autoSaveStatusBox" class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white/5 border border-pink-200/20 text-[11.5px]">
+          <div class="flex items-center gap-2 min-w-0">
+            <span id="autoSaveDot" class="w-2 h-2 rounded-full bg-pink-200/40 shrink-0"></span>
+            <span id="autoSaveStatusText" class="text-pink-100/75 truncate">Chưa liên kết file — đang lưu trên trình duyệt</span>
+          </div>
+          <button id="btnUnlinkAutoSave" type="button" class="text-[11px] text-rose-300 hover:text-rose-200 underline shrink-0 cursor-pointer hidden">
+            Ngắt
+          </button>
+        </div>
+
+        <!-- Nút liên kết file để tự động lưu trực tiếp -->
+        <button id="btnLinkAutoSave" type="button" class="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-[#b83358] to-[#d45d7e] hover:brightness-110 active:scale-[0.99] text-white font-medium text-xs shadow-lg shadow-rose-950/40 flex items-center justify-center gap-2 transition cursor-pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          <span>Liên kết file .html để tự lưu trực tiếp</span>
+        </button>
+
+        <!-- Nút tải bản sao thủ công (dự phòng cho Safari / Firefox) -->
+        <button id="btnExportHtml" type="button" class="w-full py-2 px-3.5 rounded-xl border border-pink-300/35 bg-white/5 hover:bg-white/10 text-pink-100/90 font-medium text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Tải bản sao file HTML mới</span>
         </button>
       </section>
     </div>
@@ -1996,36 +1462,48 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
   <!-- Thông báo Toast -->
   <div id="toastBox" role="status" aria-live="polite" class=""></div>
 
-  <!-- Trình phát audio ẩn cho file MP3 tải lên -->
-  <audio id="customAudioPlayer" loop=""></audio>
+  <!-- Nút chạm nhanh bật nhạc nền cho màn hình TV khi tải được nhac-nen.mp3 -->
+  <div id="tvMusicBanner" role="region" aria-label="Bật nhạc nền" class="">
+    <button id="btnStartTvMusic" type="button" class="inline-flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-90 transition">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+      <span>Bấm vào đây để bật nhạc nền</span>
+    </button>
+    <button id="btnDismissTvMusic" type="button" class="w-6 h-6 rounded-full inline-flex items-center justify-center hover:bg-white/15 transition text-base leading-none cursor-pointer" title="Ẩn thông báo này" aria-label="Đóng">×</button>
+  </div>
 
-  <!-- Cấu hình nhúng trực tiếp trong file HTML (tự động cập nhật khi xuất file dự án) -->
-  <script id="embeddedConfig" type="application/json">{"theme":"sakura-blush","title":"LỄ DẠM NGÕ","bride":"Thu Huyền","groom":"Thành Long","nameLayout":"staggered","solarDate":"28 . 11 . 2026","lunarDate":"Nhằm ngày 20 tháng 10 năm Bính Ngọ","showLunarDate":false,"tagline":"Khởi đầu một đời thương","groomFamily":"Ông Nguyễn Văn Hùng & Bà Trần Thị Lan\nTP. Hà Nội","brideFamily":"Ông Lê Quang Minh & Bà Phạm Thu Hà\nTP. Hà Nội","welcomeText":"Kính chào quý vị đại biểu, ông bà, cô bác cùng toàn thể người thân hai họ đã tới tham dự Lễ Dạm Ngõ, chung vui và chúc phúc cho khởi đầu trăm năm của hai con.","thanksText":"Gia đình hai bên xin chân thành cảm ơn sự hiện diện quý báu và những lời chúc phúc tốt đẹp của quý vị. Kính chúc hai họ luôn dồi dào sức khỏe, an khang và hạnh phúc!","slideDuration":8000,"petalDensity":"medium","showPhotoSlides":true,"embeddedPhotos":[],"exportedAt":1795665271768}</script>
+  <!-- Trình phát audio ẩn cho file MP3 tải lên hoặc đặt cùng thư mục -->
+  <audio id="customAudioPlayer" preload="auto"></audio>
+
+  <!-- Cấu hình nhúng đi kèm file HTML khi người dùng bấm "Tải file HTML (Kèm cấu hình & ảnh)" -->
+  <script id="embeddedConfig" type="application/json">{"theme":"sakura-blush","title":"LỄ DẠM NGÕ","bride":"Thu Huyền","groom":"Thành Long","nameLayout":"staggered","showWatermark":true,"dateStyle":"calendar","dateMonth":"THÁNG 11","dateDay":"28","dateYear":"2026","dateWeekday":"Thứ Bảy","dateLunarShort":"20.10 (Bính Ngọ)","solarDate":"20 . 12 . 2026","lunarDate":"Nhằm ngày 12 tháng 11 năm Bính Ngọ","showLunarDate":false,"dateFontScale":100,"tagline":"","groomFamily":"","brideFamily":"","welcomeText":"Kính chào quý vị đại biểu, ông bà, cô bác cùng toàn thể người thân hai họ đã tới tham dự Lễ Dạm Ngõ, chung vui và chúc phúc cho khởi đầu trăm năm của hai con.","thanksText":"Gia đình hai bên xin chân thành cảm ơn sự hiện diện quý báu và những lời chúc phúc tốt đẹp của quý vị. Kính chúc hai họ luôn dồi dào sức khỏe, an khang và hạnh phúc!","slideDuration":8000,"petalDensity":"medium","showPhotoSlides":true,"externalAudioFile":"nhac-nen.mp3","embeddedPhotos":[],"exportedAt":1795749867435}</script>
 
   <script>
-    /**
-     * ========================================================================
-     * TRÌNH CHIẾU LỄ DẠM NGÕ — HOA ANH ĐÀO, ĐỎ NHUNG & KEM NGÀ
-     * ========================================================================
-     */
     (function () {
       "use strict";
 
+      /* ----------------------------------------------------------------------
+         1. CẤU HÌNH MẶC ĐỊNH & LƯU TRỮ (LOCALSTORAGE + EMBEDDED FILE CONFIG)
+         ---------------------------------------------------------------------- */
       const STORAGE_KEY = "le_dam_ngo_slideshow_v2";
 
-      /* ----------------------------------------------------------------------
-         1. DỮ LIỆU MẶC ĐỊNH & TRẠNG THÁI
-         ---------------------------------------------------------------------- */
       const DEFAULT_CONFIG = {
         theme: "sakura-blush",
         title: "LỄ DẠM NGÕ",
         bride: "Minh Anh",
         groom: "Hoàng Nam",
         nameLayout: "staggered", // centered | staggered
+        showWatermark: true,
+        dateStyle: "calendar", // calendar | classic
+        dateMonth: "THÁNG 12",
+        dateDay: "20",
+        dateYear: "2026",
+        dateWeekday: "Chủ Nhật",
+        dateLunarShort: "12.11 (Bính Ngọ)",
         solarDate: "20 . 12 . 2026",
         lunarDate: "Nhằm ngày 12 tháng 11 năm Bính Ngọ",
         showLunarDate: false,
-        tagline: "Khởi đầu một đời thương",
+        dateFontScale: 100, // Tỷ lệ cỡ chữ ngày tháng (%) từ 70% - 160%
+        tagline: "",
         groomFamily: "Ông Nguyễn Văn Hùng & Bà Trần Thị Lan\nTP. Hà Nội",
         brideFamily: "Ông Lê Quang Minh & Bà Phạm Thu Hà\nTP. Hà Nội",
         welcomeText:
@@ -2035,6 +1513,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         slideDuration: 8000,
         petalDensity: "medium", // low | medium | high
         showPhotoSlides: true,
+        externalAudioFile: "nhac-nen.mp3",
       };
 
       function readEmbeddedConfig() {
@@ -2086,9 +1565,12 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         photos: initialPhotos, // [{ id, url, name, isEmbedded? }]
         currentSlide: 0,
         isPlaying: true,
-        isLockedMain: false,
+        isLockedMain: true,
         isMusicPlaying: false,
         hasCustomAudio: false,
+        audioSourceType: "builtin", // builtin | external | uploaded
+        playlist: [], // [{ id, name, url, isBlob? }]
+        currentTrackIndex: 0,
         elapsedMs: 0,
         lastTickTime: performance.now(),
       };
@@ -2100,9 +1582,17 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           bride: state.bride,
           groom: state.groom,
           nameLayout: state.nameLayout,
+          showWatermark: state.showWatermark,
+          dateStyle: state.dateStyle,
+          dateMonth: state.dateMonth,
+          dateDay: state.dateDay,
+          dateYear: state.dateYear,
+          dateWeekday: state.dateWeekday,
+          dateLunarShort: state.dateLunarShort,
           solarDate: state.solarDate,
           lunarDate: state.lunarDate,
           showLunarDate: state.showLunarDate,
+          dateFontScale: state.dateFontScale,
           tagline: state.tagline,
           groomFamily: state.groomFamily,
           brideFamily: state.brideFamily,
@@ -2111,6 +1601,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           slideDuration: state.slideDuration,
           petalDensity: state.petalDensity,
           showPhotoSlides: state.showPhotoSlides,
+          externalAudioFile: state.externalAudioFile,
         };
       }
 
@@ -2124,6 +1615,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         } catch (err) {
           // Bỏ qua nếu trình duyệt chặn localStorage
         }
+        scheduleAutoSaveToFile();
       }
 
       /* ----------------------------------------------------------------------
@@ -2153,9 +1645,19 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       const inputTitle = document.getElementById("inputTitle");
       const inputBride = document.getElementById("inputBride");
       const inputGroom = document.getElementById("inputGroom");
+      const toggleWatermark = document.getElementById("toggleWatermark");
+      const calendarDateFields = document.getElementById("calendarDateFields");
+      const classicDateFields = document.getElementById("classicDateFields");
+      const inputDateMonth = document.getElementById("inputDateMonth");
+      const inputDateDay = document.getElementById("inputDateDay");
+      const inputDateYear = document.getElementById("inputDateYear");
+      const inputDateWeekday = document.getElementById("inputDateWeekday");
+      const inputDateLunarShort = document.getElementById("inputDateLunarShort");
       const inputSolarDate = document.getElementById("inputSolarDate");
       const inputLunarDate = document.getElementById("inputLunarDate");
       const toggleLunarDate = document.getElementById("toggleLunarDate");
+      const inputDateFontScale = document.getElementById("inputDateFontScale");
+      const dateFontScaleLabel = document.getElementById("dateFontScaleLabel");
       const inputTagline = document.getElementById("inputTagline");
       const inputGroomFamily = document.getElementById("inputGroomFamily");
       const inputBrideFamily = document.getElementById("inputBrideFamily");
@@ -2166,16 +1668,35 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       const photoListPreview = document.getElementById("photoListPreview");
       const btnClearPhotos = document.getElementById("btnClearPhotos");
       const inputAudio = document.getElementById("inputAudio");
+      const inputExternalAudio = document.getElementById("inputExternalAudio");
       const audioFileName = document.getElementById("audioFileName");
+      const btnClearPlaylist = document.getElementById("btnClearPlaylist");
+      const playerTrackTitle = document.getElementById("playerTrackTitle");
+      const playerTrackMeta = document.getElementById("playerTrackMeta");
+      const playerTimeDisplay = document.getElementById("playerTimeDisplay");
+      const audioSeekBar = document.getElementById("audioSeekBar");
+      const btnAudioPrev = document.getElementById("btnAudioPrev");
+      const btnAudioRewind = document.getElementById("btnAudioRewind");
+      const btnAudioPlayPause = document.getElementById("btnAudioPlayPause");
+      const iconPlayerPlay = document.getElementById("iconPlayerPlay");
+      const iconPlayerPause = document.getElementById("iconPlayerPause");
+      const btnAudioForward = document.getElementById("btnAudioForward");
+      const btnAudioNext = document.getElementById("btnAudioNext");
+      const audioVolumeBar = document.getElementById("audioVolumeBar");
+      const audioVolumeLabel = document.getElementById("audioVolumeLabel");
+      const audioPlaylistUI = document.getElementById("audioPlaylistUI");
       const customAudioPlayer = document.getElementById("customAudioPlayer");
+      const tvMusicBanner = document.getElementById("tvMusicBanner");
+      const btnStartTvMusic = document.getElementById("btnStartTvMusic");
+      const btnDismissTvMusic = document.getElementById("btnDismissTvMusic");
       const inputDuration = document.getElementById("inputDuration");
       const durationLabel = document.getElementById("durationLabel");
       const btnResetDefault = document.getElementById("btnResetDefault");
       const btnExportHtml = document.getElementById("btnExportHtml");
-
-      /* ----------------------------------------------------------------------
-         3. HÀM TIỆN ÍCH & TOAST
-         ---------------------------------------------------------------------- */
+      const btnLinkAutoSave = document.getElementById("btnLinkAutoSave");
+      const btnUnlinkAutoSave = document.getElementById("btnUnlinkAutoSave");
+      const autoSaveDot = document.getElementById("autoSaveDot");
+      const autoSaveStatusText = document.getElementById("autoSaveStatusText");
       function escapeHtml(str) {
         return String(str || "")
           .replace(/&/g, "&amp;")
@@ -2200,21 +1721,27 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       }
 
       /**
-       * Chuyển ảnh sang Data URL (nén tối ưu cho TV 16:9) để nhúng gọn vào file HTML xuất ra
+       * Chuyển ảnh (blob/URL) sang Data URL nén gọn để nhúng trực tiếp vào file HTML
        */
-      function convertPhotoToDataUrl(url, maxDim = 1600, quality = 0.84) {
+      function convertPhotoToDataUrl(url) {
         return new Promise((resolve) => {
-          if (typeof url === "string" && url.startsWith("data:")) {
+          if (!url) {
+            resolve(null);
+            return;
+          }
+          if (String(url).startsWith("data:")) {
             resolve(url);
             return;
           }
           const img = new Image();
+          img.crossOrigin = "anonymous";
           img.onload = () => {
             try {
+              const maxSide = 1600;
               let w = img.naturalWidth || img.width;
               let h = img.naturalHeight || img.height;
-              if (w > maxDim || h > maxDim) {
-                const ratio = Math.min(maxDim / w, maxDim / h);
+              if (w > maxSide || h > maxSide) {
+                const ratio = Math.min(maxSide / w, maxSide / h);
                 w = Math.round(w * ratio);
                 h = Math.round(h * ratio);
               }
@@ -2223,8 +1750,8 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               c.height = h;
               const cctx = c.getContext("2d");
               cctx.drawImage(img, 0, 0, w, h);
-              resolve(c.toDataURL("image/jpeg", quality));
-            } catch (e) {
+              resolve(c.toDataURL("image/jpeg", 0.86));
+            } catch (err) {
               resolve(null);
             }
           };
@@ -2233,82 +1760,230 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         });
       }
 
-      function slugifyFilename(str) {
-        return String(str || "")
+      /**
+       * Tạo tên file không dấu an toàn khi tải bản sao HTML
+       */
+      function slugifyFilename(text) {
+        return String(text || "")
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
-          .replace(/đ/g, "d")
-          .replace(/Đ/g, "D")
+          .replace(/[đĐ]/g, "d")
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-+|-+$/g, "");
       }
 
       /**
-       * Xuất một file HTML hoàn chỉnh chứa sẵn toàn bộ cấu hình & ảnh kỷ niệm hiện tại
+       * Tạo chuỗi HTML hoàn chỉnh chứa sẵn toàn bộ cấu hình & ảnh kỷ niệm hiện tại
+       */
+      async function generateStandaloneHtmlString() {
+        const embeddedPhotos = [];
+        for (const p of state.photos) {
+          const dataUrl = await convertPhotoToDataUrl(p.url);
+          if (dataUrl) {
+            embeddedPhotos.push({
+              id: p.id,
+              name: p.name,
+              url: dataUrl,
+            });
+          }
+        }
+
+        const exportPayload = {
+          ...getPortableConfigSnapshot(),
+          embeddedPhotos,
+          exportedAt: Date.now(),
+        };
+
+        // Nhân bản DOM và dọn sạch các trạng thái tạm thời để file lưu ra luôn sạch sẽ
+        const docClone = document.documentElement.cloneNode(true);
+        const bodyClone = docClone.querySelector("body");
+        if (bodyClone) {
+          bodyClone.setAttribute("data-theme", state.theme);
+          bodyClone.classList.remove("idle-mode");
+        }
+
+        const embeddedScript = docClone.querySelector("#embeddedConfig");
+        if (embeddedScript) {
+          // Tránh chuỗi đóng thẻ script trong dữ liệu người dùng làm vỡ cấu trúc HTML
+          const closingScriptPattern = new RegExp("<" + "/script", "gi");
+          embeddedScript.textContent = JSON.stringify(exportPayload).replace(
+            closingScriptPattern,
+            "<" + "\\/script"
+          );
+        }
+
+        const drawerClone = docClone.querySelector("#settingsDrawer");
+        if (drawerClone) drawerClone.classList.remove("open");
+        const backdropClone = docClone.querySelector("#drawerBackdrop");
+        if (backdropClone) backdropClone.classList.remove("open");
+        const toastClone = docClone.querySelector("#toastBox");
+        if (toastClone) {
+          toastClone.classList.remove("show");
+          toastClone.textContent = "";
+        }
+        const tvBannerClone = docClone.querySelector("#tvMusicBanner");
+        if (tvBannerClone) {
+          tvBannerClone.classList.remove("show");
+        }
+        const slidesClone = docClone.querySelector("#slidesContainer");
+        if (slidesClone) slidesClone.innerHTML = "";
+        const dotsClone = docClone.querySelector("#slideDots");
+        if (dotsClone) dotsClone.innerHTML = "";
+        const thumbsClone = docClone.querySelector("#photoListPreview");
+        if (thumbsClone) thumbsClone.innerHTML = "";
+        const playlistClone = docClone.querySelector("#audioPlaylistUI");
+        if (playlistClone) {
+          playlistClone.innerHTML = "";
+          playlistClone.classList.add("hidden");
+        }
+        const progressClone = docClone.querySelector("#progressBar");
+        if (progressClone) progressClone.style.width = "0%";
+        const audioClone = docClone.querySelector("#customAudioPlayer");
+        if (audioClone) audioClone.removeAttribute("src");
+
+        // Đặt lại trạng thái hiển thị liên kết file về mặc định trong file đã lưu
+        const statusTextClone = docClone.querySelector("#autoSaveStatusText");
+        if (statusTextClone) {
+          statusTextClone.textContent = "Chưa liên kết file — đang lưu trên trình duyệt";
+        }
+        const statusDotClone = docClone.querySelector("#autoSaveDot");
+        if (statusDotClone) {
+          statusDotClone.className = "w-2 h-2 rounded-full bg-pink-200/40 shrink-0";
+        }
+        const unlinkClone = docClone.querySelector("#btnUnlinkAutoSave");
+        if (unlinkClone) unlinkClone.classList.add("hidden");
+
+        return "<!DOCTYPE html>\n" + docClone.outerHTML;
+      }
+
+      /* ----------------------------------------------------------------------
+         TỰ ĐỘNG LƯU TRỰC TIẾP VÀO FILE HTML (FILE SYSTEM ACCESS API)
+         ---------------------------------------------------------------------- */
+      let linkedFileHandle = null;
+      let autoSaveTimer = null;
+      let isWritingFile = false;
+      let pendingWriteAgain = false;
+
+      function updateAutoSaveUI(mode, message) {
+        autoSaveStatusText.textContent = message;
+        btnUnlinkAutoSave.classList.toggle("hidden", !linkedFileHandle);
+        autoSaveDot.className = "w-2 h-2 rounded-full shrink-0 ";
+        if (mode === "saved") {
+          autoSaveDot.className += "bg-emerald-400";
+        } else if (mode === "saving") {
+          autoSaveDot.className += "bg-amber-300 animate-pulse";
+        } else if (mode === "error") {
+          autoSaveDot.className += "bg-rose-400";
+        } else {
+          autoSaveDot.className += "bg-pink-200/40";
+        }
+      }
+
+      async function writeCurrentStateToLinkedFile(showSuccessToast = false) {
+        if (!linkedFileHandle) return;
+        if (isWritingFile) {
+          pendingWriteAgain = true;
+          return;
+        }
+        isWritingFile = true;
+        pendingWriteAgain = false;
+        updateAutoSaveUI("saving", `Đang tự lưu vào ${linkedFileHandle.name}...`);
+
+        try {
+          const htmlContent = await generateStandaloneHtmlString();
+          const writable = await linkedFileHandle.createWritable();
+          await writable.write(htmlContent);
+          await writable.close();
+
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+          updateAutoSaveUI("saved", `Đã tự lưu vào ${linkedFileHandle.name} (${timeStr})`);
+          if (showSuccessToast) {
+            showToast(`Đã liên kết & tự lưu vào ${linkedFileHandle.name}!`);
+          }
+        } catch (err) {
+          console.error("Auto-save error:", err);
+          updateAutoSaveUI("error", "Không thể ghi file — vui lòng liên kết lại");
+          showToast("Mất quyền ghi file. Hãy bấm liên kết lại file .html.");
+        } finally {
+          isWritingFile = false;
+          if (pendingWriteAgain) {
+            writeCurrentStateToLinkedFile(false);
+          }
+        }
+      }
+
+      function scheduleAutoSaveToFile() {
+        if (!linkedFileHandle) return;
+        updateAutoSaveUI("saving", `Đang chuẩn bị lưu vào ${linkedFileHandle.name}...`);
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+          writeCurrentStateToLinkedFile(false);
+        }, 700);
+      }
+
+      async function linkFileForAutoSave() {
+        if (typeof window.showOpenFilePicker !== "function") {
+          showToast("Trình duyệt này chưa hỗ trợ ghi file trực tiếp. Hãy dùng Chrome/Edge hoặc nút Tải bản sao.");
+          return;
+        }
+        try {
+          const [handle] = await window.showOpenFilePicker({
+            types: [
+              {
+                description: "Tệp trình chiếu HTML",
+                accept: { "text/html": [".html", ".htm"] },
+              },
+            ],
+            multiple: false,
+          });
+          if (!handle) return;
+
+          if (typeof handle.queryPermission === "function") {
+            let perm = await handle.queryPermission({ mode: "readwrite" });
+            if (perm !== "granted" && typeof handle.requestPermission === "function") {
+              perm = await handle.requestPermission({ mode: "readwrite" });
+            }
+            if (perm !== "granted") {
+              showToast("Bạn cần cấp quyền lưu thay đổi để bật tự động lưu vào file.");
+              return;
+            }
+          }
+
+          linkedFileHandle = handle;
+          await writeCurrentStateToLinkedFile(true);
+        } catch (err) {
+          if (err && err.name === "AbortError") return;
+          if (err && err.name === "SecurityError") {
+            showToast("Khung xem trước đang chặn truy cập ổ cứng — hãy tải file về rồi mở trực tiếp bằng Chrome/Edge để dùng tính năng tự lưu.");
+          } else {
+            console.error("Link file error:", err);
+            showToast("Không thể liên kết file lúc này. Bạn vẫn có thể dùng nút Tải bản sao.");
+          }
+        }
+      }
+
+      function unlinkFileAutoSave() {
+        linkedFileHandle = null;
+        clearTimeout(autoSaveTimer);
+        updateAutoSaveUI("idle", "Đã ngắt liên kết — đang lưu trên trình duyệt");
+        showToast("Đã tắt tự động ghi đè file HTML.");
+      }
+
+      /**
+       * Xuất một bản sao file HTML hoàn chỉnh chứa sẵn toàn bộ cấu hình & ảnh kỷ niệm hiện tại
        */
       async function exportProjectHtml() {
         try {
           btnExportHtml.disabled = true;
           showToast("Đang đóng gói cấu hình & ảnh vào file HTML...");
 
-          const embeddedPhotos = [];
-          for (const p of state.photos) {
-            const dataUrl = await convertPhotoToDataUrl(p.url);
-            if (dataUrl) {
-              embeddedPhotos.push({
-                id: p.id,
-                name: p.name,
-                url: dataUrl,
-              });
-            }
-          }
-
-          const exportPayload = {
-            ...getPortableConfigSnapshot(),
-            embeddedPhotos,
-            exportedAt: Date.now(),
-          };
-
-          // Nhân bản DOM và dọn sạch các trạng thái tạm thời để file xuất ra luôn sạch sẽ
-          const docClone = document.documentElement.cloneNode(true);
-          const bodyClone = docClone.querySelector("body");
-          if (bodyClone) {
-            bodyClone.setAttribute("data-theme", state.theme);
-            bodyClone.classList.remove("idle-mode");
-          }
-
-          const embeddedScript = docClone.querySelector("#embeddedConfig");
-          if (embeddedScript) {
-            // Tránh chuỗi đóng thẻ script trong dữ liệu người dùng làm vỡ cấu trúc HTML
-            const closingScriptPattern = new RegExp("<" + "/script", "gi");
-            embeddedScript.textContent = JSON.stringify(exportPayload).replace(
-              closingScriptPattern,
-              "<" + "\\/script"
-            );
-          }
-
-          const drawerClone = docClone.querySelector("#settingsDrawer");
-          if (drawerClone) drawerClone.classList.remove("open");
-          const backdropClone = docClone.querySelector("#drawerBackdrop");
-          if (backdropClone) backdropClone.classList.remove("open");
-          const toastClone = docClone.querySelector("#toastBox");
-          if (toastClone) {
-            toastClone.classList.remove("show");
-            toastClone.textContent = "";
-          }
-          const slidesClone = docClone.querySelector("#slidesContainer");
-          if (slidesClone) slidesClone.innerHTML = "";
-          const dotsClone = docClone.querySelector("#slideDots");
-          if (dotsClone) dotsClone.innerHTML = "";
-          const thumbsClone = docClone.querySelector("#photoListPreview");
-          if (thumbsClone) thumbsClone.innerHTML = "";
-          const progressClone = docClone.querySelector("#progressBar");
-          if (progressClone) progressClone.style.width = "0%";
-          const audioClone = docClone.querySelector("#customAudioPlayer");
-          if (audioClone) audioClone.removeAttribute("src");
-
-          const htmlContent = "<!DOCTYPE html>\n" + docClone.outerHTML;
+          const htmlContent = await generateStandaloneHtmlString();
           const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
           const downloadUrl = URL.createObjectURL(blob);
 
@@ -2321,7 +1996,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           document.body.removeChild(link);
           setTimeout(() => URL.revokeObjectURL(downloadUrl), 2500);
 
-          showToast("Đã tải file HTML kèm cấu hình! Mở file mới tải trên máy nào cũng giữ nguyên.");
+          showToast("Đã tải bản sao file HTML kèm cấu hình & ảnh!");
         } catch (err) {
           console.error("Export error:", err);
           showToast("Không thể xuất file trong khung này, vui lòng thử lại trên trình duyệt.");
@@ -2331,12 +2006,396 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       }
 
       /* ----------------------------------------------------------------------
-         4. DỰNG NỘI DUNG CÁC SLIDE (TỐI ƯU CỠ CHỮ CHO MÀN HÌNH TV)
+         8. NHẠC NỀN & TRÌNH PHÁT PLAYLIST MP3 (TUA BÀI, TUA THỜI GIAN, ÂM LƯỢNG)
          ---------------------------------------------------------------------- */
+      let audioCtx = null;
+      let synthTimer = null;
+      let isSeekingAudio = false;
+      // Hợp âm rải lãng mạn giọng F trưởng (F4, A4, C5, E5, G5, D5, Bb4)
+      const ROMANTIC_NOTES = [349.23, 440.0, 523.25, 659.25, 523.25, 440.0, 392.0, 466.16, 587.33, 523.25, 440.0, 392.0];
+      let noteStep = 0;
+
+      function formatAudioTime(sec) {
+        if (!Number.isFinite(sec) || sec < 0) return "00:00";
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+      }
+
+      function renderPlaylistUI() {
+        const hasTracks = state.playlist.length > 0;
+        btnClearPlaylist.classList.toggle("hidden", state.audioSourceType !== "uploaded");
+        audioSeekBar.disabled = !hasTracks;
+
+        if (!hasTracks) {
+          audioPlaylistUI.innerHTML = "";
+          audioPlaylistUI.classList.add("hidden");
+          playerTrackTitle.textContent = "Nhạc piano tích hợp sẵn";
+          playerTrackMeta.textContent = "Chọn file MP3 để mở tính năng tua playlist";
+          playerTimeDisplay.textContent = "00:00 / 00:00";
+          audioSeekBar.value = 0;
+          return;
+        }
+
+        const currentTrack = state.playlist[state.currentTrackIndex] || state.playlist[0];
+        playerTrackTitle.textContent = currentTrack.name;
+        playerTrackMeta.textContent = `Bài ${state.currentTrackIndex + 1} / ${state.playlist.length} • ${
+          state.audioSourceType === "external" ? "Thư mục web" : "Tải từ máy"
+        }`;
+
+        audioPlaylistUI.classList.remove("hidden");
+        audioPlaylistUI.innerHTML = state.playlist
+          .map((track, idx) => {
+            const isActive = idx === state.currentTrackIndex;
+            return `
+              <div class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-[11.5px] transition ${
+                isActive
+                  ? "bg-pink-400/25 text-pink-100 border border-pink-300/40"
+                  : "hover:bg-white/10 text-pink-100/75"
+              }">
+                <button
+                  type="button"
+                  data-track-index="${idx}"
+                  class="flex-1 text-left truncate cursor-pointer flex items-center gap-1.5"
+                  title="${escapeHtml(track.name)}"
+                >
+                  <span class="text-[10px] opacity-70 w-4 shrink-0">${idx + 1}.</span>
+                  <span class="truncate">${escapeHtml(track.name)}</span>
+                </button>
+                ${
+                  state.audioSourceType === "uploaded"
+                    ? `<button
+                        type="button"
+                        data-remove-track="${track.id}"
+                        class="w-4 h-4 rounded-full hover:bg-white/20 flex items-center justify-center text-xs shrink-0 cursor-pointer"
+                        title="Xóa bài này"
+                      >×</button>`
+                    : ""
+                }
+              </div>
+            `;
+          })
+          .join("");
+
+        audioPlaylistUI.querySelectorAll("[data-track-index]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            playTrackAtIndex(Number(btn.dataset.trackIndex), true);
+          });
+        });
+
+        audioPlaylistUI.querySelectorAll("[data-remove-track]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.removeTrack;
+            const removeIdx = state.playlist.findIndex((t) => t.id === id);
+            if (removeIdx === -1) return;
+            const removed = state.playlist[removeIdx];
+            if (removed.isBlob) URL.revokeObjectURL(removed.url);
+            state.playlist.splice(removeIdx, 1);
+
+            if (!state.playlist.length) {
+              resetToBuiltinAudio();
+              return;
+            }
+            if (state.currentTrackIndex >= state.playlist.length) {
+              state.currentTrackIndex = 0;
+            }
+            if (removeIdx === state.currentTrackIndex) {
+              playTrackAtIndex(state.currentTrackIndex, state.isMusicPlaying);
+            } else {
+              renderPlaylistUI();
+            }
+          });
+        });
+      }
+
+      function resetToBuiltinAudio() {
+        state.playlist.forEach((t) => {
+          if (t.isBlob) URL.revokeObjectURL(t.url);
+        });
+        state.playlist = [];
+        state.currentTrackIndex = 0;
+        state.hasCustomAudio = false;
+        state.audioSourceType = "builtin";
+        customAudioPlayer.pause();
+        customAudioPlayer.removeAttribute("src");
+        customAudioPlayer.load();
+        tvMusicBanner.classList.remove("show");
+        audioFileName.textContent = "Đang dùng: Nhạc piano tích hợp sẵn.";
+        renderPlaylistUI();
+        if (state.isMusicPlaying) {
+          playRomanticNote();
+          clearInterval(synthTimer);
+          synthTimer = setInterval(playRomanticNote, 1350);
+        }
+      }
+
+      function playTrackAtIndex(index, autoPlay = true) {
+        if (!state.playlist.length) return;
+        const total = state.playlist.length;
+        state.currentTrackIndex = ((index % total) + total) % total;
+        const track = state.playlist[state.currentTrackIndex];
+
+        customAudioPlayer.oncanplaythrough = null;
+        customAudioPlayer.onerror = null;
+        customAudioPlayer.src = track.url;
+        customAudioPlayer.currentTime = 0;
+        state.hasCustomAudio = true;
+        clearInterval(synthTimer);
+        audioFileName.textContent = `Đang phát (${state.currentTrackIndex + 1}/${total}): ${track.name}`;
+        renderPlaylistUI();
+
+        if (autoPlay) {
+          state.isMusicPlaying = true;
+          updateMusicUI();
+          tvMusicBanner.classList.remove("show");
+          customAudioPlayer.play().catch(() => {
+            state.isMusicPlaying = false;
+            updateMusicUI();
+            tvMusicBanner.classList.add("show");
+          });
+        }
+      }
+
+      function seekAudioBy(deltaSec) {
+        if (!state.hasCustomAudio || !state.playlist.length) {
+          showToast("Hãy chọn file nhạc MP3 để sử dụng tính năng tua.");
+          return;
+        }
+        const duration = customAudioPlayer.duration;
+        if (!Number.isFinite(duration) || duration <= 0) return;
+        const nextTime = Math.min(duration, Math.max(0, customAudioPlayer.currentTime + deltaSec));
+        customAudioPlayer.currentTime = nextTime;
+        updatePlayerTimeUI();
+      }
+
+      function updatePlayerTimeUI() {
+        if (!state.hasCustomAudio || !state.playlist.length) return;
+        const cur = customAudioPlayer.currentTime || 0;
+        const dur = customAudioPlayer.duration;
+        playerTimeDisplay.textContent = `${formatAudioTime(cur)} / ${formatAudioTime(dur)}`;
+        if (!isSeekingAudio && Number.isFinite(dur) && dur > 0) {
+          audioSeekBar.max = dur;
+          audioSeekBar.value = cur;
+        }
+      }
+
+      function playRomanticNote() {
+        if (!state.isMusicPlaying || state.hasCustomAudio) return;
+        try {
+          if (!audioCtx) {
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new Ctx();
+          }
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume();
+          }
+
+          const freq = ROMANTIC_NOTES[noteStep % ROMANTIC_NOTES.length];
+          noteStep++;
+
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const overtone = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, now);
+          overtone.type = "triangle";
+          overtone.frequency.setValueAtTime(freq * 2, now);
+
+          const overtoneGain = audioCtx.createGain();
+          overtoneGain.gain.setValueAtTime(0.12, now);
+
+          const volScale = Math.max(0.05, customAudioPlayer.volume);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.055 * volScale, now + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.5);
+
+          osc.connect(gain);
+          overtone.connect(overtoneGain);
+          overtoneGain.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          overtone.start(now);
+          osc.stop(now + 2.6);
+          overtone.stop(now + 2.6);
+        } catch (err) {
+          console.error("Audio error:", err);
+        }
+      }
+
+      function toggleMusic() {
+        state.isMusicPlaying = !state.isMusicPlaying;
+        updateMusicUI();
+
+        if (state.isMusicPlaying) {
+          tvMusicBanner.classList.remove("show");
+          if (state.hasCustomAudio && state.playlist.length) {
+            if (!customAudioPlayer.getAttribute("src")) {
+              customAudioPlayer.src = state.playlist[state.currentTrackIndex].url;
+            }
+            customAudioPlayer.play().catch(() => {
+              state.isMusicPlaying = false;
+              updateMusicUI();
+              showToast("Trình duyệt chặn tự phát nhạc, vui lòng nhấn lại nút phát.");
+            });
+          } else {
+            playRomanticNote();
+            clearInterval(synthTimer);
+            synthTimer = setInterval(playRomanticNote, 1350);
+            showToast("Đang phát nhạc nền lãng mạn (có thể thêm playlist MP3 trong cài đặt)");
+          }
+        } else {
+          customAudioPlayer.pause();
+          clearInterval(synthTimer);
+        }
+      }
+
+      /**
+       * Tự động kiểm tra và nạp danh sách file nhạc đặt cùng thư mục (vd: nhac-nen.mp3, bai-2.mp3)
+       */
+      function loadExternalAudioIfAvailable() {
+        const rawList = (state.externalAudioFile || "").trim();
+        if (!rawList || state.audioSourceType === "uploaded") return;
+
+        const filePaths = rawList
+          .split(/[,\n]+/)
+          .map((s) => s.trim())
+          .filter(Boolean);
+        if (!filePaths.length) return;
+
+        const firstPath = filePaths[0];
+        customAudioPlayer.oncanplaythrough = null;
+        customAudioPlayer.onerror = null;
+
+        let handled = false;
+
+        customAudioPlayer.oncanplaythrough = () => {
+          if (handled || state.audioSourceType === "uploaded") return;
+          handled = true;
+          state.playlist = filePaths.map((path, idx) => ({
+            id: `ext-${idx}`,
+            name: path.split("/").pop() || path,
+            url: path,
+            isBlob: false,
+          }));
+          state.currentTrackIndex = 0;
+          state.hasCustomAudio = true;
+          state.audioSourceType = "external";
+          audioFileName.textContent = `Đã nhận ${state.playlist.length} bài nhạc từ thư mục web`;
+          renderPlaylistUI();
+
+          if (!state.isMusicPlaying) {
+            const playPromise = customAudioPlayer.play();
+            if (playPromise && typeof playPromise.then === "function") {
+              playPromise
+                .then(() => {
+                  state.isMusicPlaying = true;
+                  updateMusicUI();
+                  tvMusicBanner.classList.remove("show");
+                })
+                .catch(() => {
+                  tvMusicBanner.classList.add("show");
+                });
+            } else {
+              tvMusicBanner.classList.add("show");
+            }
+          }
+        };
+
+        customAudioPlayer.onerror = () => {
+          if (handled || state.audioSourceType === "uploaded") return;
+          handled = true;
+          state.playlist = [];
+          state.currentTrackIndex = 0;
+          state.hasCustomAudio = false;
+          state.audioSourceType = "builtin";
+          customAudioPlayer.removeAttribute("src");
+          tvMusicBanner.classList.remove("show");
+          audioFileName.textContent = "Đang dùng: Nhạc piano tích hợp sẵn.";
+          renderPlaylistUI();
+        };
+
+        customAudioPlayer.src = firstPath;
+        customAudioPlayer.load();
+      }
+
+      function updateMusicUI() {
+        iconMusicOn.classList.toggle("hidden", !state.isMusicPlaying);
+        iconMusicOff.classList.toggle("hidden", state.isMusicPlaying);
+        btnMusic.classList.toggle("active-mode", state.isMusicPlaying);
+        iconPlayerPlay.classList.toggle("hidden", state.isMusicPlaying);
+        iconPlayerPause.classList.toggle("hidden", !state.isMusicPlaying);
+      }
+
+      /* ----------------------------------------------------------------------
+         4. DỰNG GIAO DIỆN CÁC SLIDE & BIỂU TƯỢNG SONG HỶ MỜ
+         ---------------------------------------------------------------------- */
+      function getWatermarkSvgHTML() {
+        return `
+          <div class="main-watermark-wrap" aria-hidden="true">
+            <svg class="main-watermark-svg" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <clipPath id="songHyCircleClip">
+                  <circle cx="120" cy="120" r="110" />
+                </clipPath>
+              </defs>
+              <circle cx="120" cy="120" r="110" stroke="currentColor" stroke-width="8" />
+              <g clip-path="url(#songHyCircleClip)" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter">
+                <line x1="72" y1="20" x2="72" y2="112" />
+                <line x1="34" y1="44" x2="108" y2="44" />
+                <line x1="42" y1="68" x2="102" y2="68" />
+                <rect x="44" y="84" width="56" height="24" />
+                <line x1="168" y1="20" x2="168" y2="112" />
+                <line x1="132" y1="44" x2="206" y2="44" />
+                <line x1="138" y1="68" x2="198" y2="68" />
+                <rect x="140" y="84" width="56" height="24" />
+                <line x1="22" y1="126" x2="218" y2="126" />
+                <rect x="40" y="144" width="64" height="44" />
+                <rect x="136" y="144" width="64" height="44" />
+                <line x1="120" y1="126" x2="120" y2="220" />
+                <line x1="34" y1="206" x2="206" y2="206" />
+              </g>
+            </svg>
+          </div>
+        `;
+      }
+
       function buildSlidesHTML() {
         const slides = [];
         const nameLayoutClass =
           state.nameLayout === "staggered" ? "layout-staggered" : "layout-centered";
+
+        const dateBlockHTML =
+          state.dateStyle === "calendar"
+            ? `
+              <div class="date-calendar-ui stagger-item delay-4">
+                <div class="date-cal-month italic uppercase">${escapeHtml(state.dateMonth)}</div>
+                <div class="date-cal-middle">
+                  <div class="date-cal-side italic">${escapeHtml(state.dateWeekday)}</div>
+                  <div class="date-cal-day italic">${escapeHtml(state.dateDay)}</div>
+                  <div class="date-cal-side italic">${escapeHtml(state.dateLunarShort)}</div>
+                </div>
+                <div class="date-cal-year italic">${escapeHtml(state.dateYear)}</div>
+              </div>
+            `
+            : `
+              <div
+                class="stagger-item delay-4 font-be-vietnam font-medium tracking-[0.24em] date-classic-solar"
+              >
+                ${escapeHtml(state.solarDate)}
+              </div>
+              ${
+                state.showLunarDate && state.lunarDate.trim()
+                  ? `<div
+                      class="stagger-item delay-4 font-cormorant italic date-classic-lunar"
+                    >
+                      (${escapeHtml(state.lunarDate)})
+                    </div>`
+                  : ""
+              }
+            `;
 
         // SLIDE 1: PHÔNG CHÍNH LỄ DẠM NGÕ
         slides.push(`
@@ -2349,15 +2408,17 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 </div>
               </div>
               <h1
-                class="stagger-item delay-1 font-cormorant uppercase font-semibold tracking-[0.22em]"
+                class="stagger-item delay-1 font-cormorant italic uppercase font-semibold tracking-[0.2em]"
                 style="font-size: clamp(32px, 5.2vw, 72px); color: var(--text-title); line-height: 1.15;"
               >
                 ${escapeHtml(state.title)}
               </h1>
             </div>
 
-            <!-- Khối giữa: Tên Cô Dâu & Chú Rể (Căn giữa hoặc Đan xen so le) -->
+            <!-- Khối giữa: Biểu tượng Song Hỷ mờ + Tên Cô Dâu & Chú Rể -->
             <div class="couple-names-wrap ${nameLayoutClass} flex flex-col items-center justify-center my-auto py-2">
+              ${state.showWatermark ? getWatermarkSvgHTML() : ""}
+
               <div
                 class="name-line name-top stagger-item delay-2 font-calligraphy shimmer-text px-4"
                 style="font-size: clamp(68px, 11.2vw, 172px); line-height: 1.12; filter: drop-shadow(var(--name-shadow));"
@@ -2366,7 +2427,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               </div>
 
               <div
-                class="stagger-item delay-3 font-calligraphy my-1"
+                class="amp-line stagger-item delay-3 font-calligraphy my-1"
                 style="font-size: clamp(38px, 5.2vw, 76px); color: var(--text-amp); line-height: 0.95;"
               >
                 &amp;
@@ -2380,31 +2441,15 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
               </div>
             </div>
 
-            <!-- Khối dưới: Ngày Dương Lịch, Ngày Âm Lịch (tùy chọn) & Tagline -->
+            <!-- Khối dưới: Ngày Tháng (Lịch ngang hoặc 1 dòng) & Tagline -->
             <div class="flex flex-col items-center gap-2">
-              <div
-                class="stagger-item delay-4 font-be-vietnam font-medium tracking-[0.24em]"
-                style="font-size: clamp(20px, 2.4vw, 36px); color: var(--text-secondary);"
-              >
-                ${escapeHtml(state.solarDate)}
-              </div>
-
-              ${
-                state.showLunarDate && state.lunarDate.trim()
-                  ? `<div
-                      class="stagger-item delay-4 font-cormorant italic"
-                      style="font-size: clamp(19px, 2vw, 30px); color: var(--text-muted);"
-                    >
-                      (${escapeHtml(state.lunarDate)})
-                    </div>`
-                  : ""
-              }
+              ${dateBlockHTML}
 
               ${
                 state.tagline.trim()
                   ? `<p
-                      class="stagger-item delay-5 font-cormorant italic mt-2"
-                      style="font-size: clamp(22px, 2.5vw, 38px); color: var(--text-secondary); letter-spacing: 0.04em;"
+                      class="stagger-item delay-5 font-cormorant italic mt-1"
+                      style="font-size: clamp(20px, 2.2vw, 34px); color: var(--text-secondary); letter-spacing: 0.04em;"
                     >
                       ${escapeHtml(state.tagline)}
                     </p>`
@@ -2863,87 +2908,6 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       }
 
       /* ----------------------------------------------------------------------
-         8. NHẠC NỀN (HỘP NHẠC / PIANO ARPEGGIO TÍCH HỢP HOẶC MP3 TẢI LÊN)
-         ---------------------------------------------------------------------- */
-      let audioCtx = null;
-      let synthTimer = null;
-      // Hợp âm rải lãng mạn giọng F trưởng (F4, A4, C5, E5, G5, D5, Bb4)
-      const ROMANTIC_NOTES = [349.23, 440.0, 523.25, 659.25, 523.25, 440.0, 392.0, 466.16, 587.33, 523.25, 440.0, 392.0];
-      let noteStep = 0;
-
-      function playRomanticNote() {
-        if (!state.isMusicPlaying || state.hasCustomAudio) return;
-        try {
-          if (!audioCtx) {
-            const Ctx = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new Ctx();
-          }
-          if (audioCtx.state === "suspended") {
-            audioCtx.resume();
-          }
-
-          const freq = ROMANTIC_NOTES[noteStep % ROMANTIC_NOTES.length];
-          noteStep++;
-
-          const now = audioCtx.currentTime;
-          const osc = audioCtx.createOscillator();
-          const overtone = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, now);
-          overtone.type = "triangle";
-          overtone.frequency.setValueAtTime(freq * 2, now);
-
-          const overtoneGain = audioCtx.createGain();
-          overtoneGain.gain.setValueAtTime(0.12, now);
-
-          gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.exponentialRampToValueAtTime(0.055, now + 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.5);
-
-          osc.connect(gain);
-          overtone.connect(overtoneGain);
-          overtoneGain.connect(gain);
-          gain.connect(audioCtx.destination);
-
-          osc.start(now);
-          overtone.start(now);
-          osc.stop(now + 2.6);
-          overtone.stop(now + 2.6);
-        } catch (err) {
-          console.error("Audio error:", err);
-        }
-      }
-
-      function toggleMusic() {
-        state.isMusicPlaying = !state.isMusicPlaying;
-        updateMusicUI();
-
-        if (state.isMusicPlaying) {
-          if (state.hasCustomAudio) {
-            customAudioPlayer.play().catch(() => {
-              showToast("Trình duyệt chặn tự phát nhạc, vui lòng nhấn lại nút loa.");
-            });
-          } else {
-            playRomanticNote();
-            clearInterval(synthTimer);
-            synthTimer = setInterval(playRomanticNote, 1350);
-            showToast("Đang phát nhạc nền lãng mạn (có thể tải file .mp3 riêng trong ⚙️)");
-          }
-        } else {
-          customAudioPlayer.pause();
-          clearInterval(synthTimer);
-        }
-      }
-
-      function updateMusicUI() {
-        iconMusicOn.classList.toggle("hidden", !state.isMusicPlaying);
-        iconMusicOff.classList.toggle("hidden", state.isMusicPlaying);
-        btnMusic.classList.toggle("active-mode", state.isMusicPlaying);
-      }
-
-      /* ----------------------------------------------------------------------
          9. ĐIỀU KHIỂN CHẾ ĐỘ TV (AUTO-HIDE 3 GIÂY, FULLSCREEN, KHÓA PHÔNG)
          ---------------------------------------------------------------------- */
       let idleTimer = null;
@@ -3060,18 +3024,48 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         });
       }
 
+      function updateDateStyleUI() {
+        const isCalendar = state.dateStyle === "calendar";
+        calendarDateFields.classList.toggle("hidden", !isCalendar);
+        classicDateFields.classList.toggle("hidden", isCalendar);
+        document.querySelectorAll(".date-style-btn").forEach((btn) => {
+          const active = btn.dataset.dateStyle === state.dateStyle;
+          btn.classList.toggle("border-pink-300", active);
+          btn.classList.toggle("bg-pink-300/25", active);
+          btn.classList.toggle("text-pink-100", active);
+          btn.classList.toggle("font-medium", active);
+          btn.classList.toggle("border-pink-200/25", !active);
+        });
+      }
+
+      function applyDateFontScale(scalePercent) {
+        const clamped = Math.min(160, Math.max(70, Number(scalePercent) || 100));
+        state.dateFontScale = clamped;
+        document.documentElement.style.setProperty("--date-scale", (clamped / 100).toFixed(2));
+        inputDateFontScale.value = clamped;
+        dateFontScaleLabel.textContent = `${clamped}%`;
+      }
+
       function syncInputsFromState() {
         inputTitle.value = state.title;
         inputBride.value = state.bride;
         inputGroom.value = state.groom;
+        toggleWatermark.checked = state.showWatermark;
+        inputDateMonth.value = state.dateMonth;
+        inputDateDay.value = state.dateDay;
+        inputDateYear.value = state.dateYear;
+        inputDateWeekday.value = state.dateWeekday;
+        inputDateLunarShort.value = state.dateLunarShort;
         inputSolarDate.value = state.solarDate;
         inputLunarDate.value = state.lunarDate;
         toggleLunarDate.checked = state.showLunarDate;
+        applyDateFontScale(state.dateFontScale);
         inputTagline.value = state.tagline;
         inputGroomFamily.value = state.groomFamily;
         inputBrideFamily.value = state.brideFamily;
         inputWelcome.value = state.welcomeText;
         inputThanks.value = state.thanksText;
+        inputExternalAudio.value = state.externalAudioFile || "nhac-nen.mp3";
         toggleShowPhotoSlides.checked = state.showPhotoSlides;
         const sec = Math.round(state.slideDuration / 1000);
         inputDuration.value = sec;
@@ -3079,6 +3073,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         applyTheme(state.theme, false);
         updateDensityButtons();
         updateNameLayoutButtons();
+        updateDateStyleUI();
       }
 
       function renderPhotoThumbnails() {
@@ -3112,6 +3107,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             state.photos = state.photos.filter((p) => p.id !== id);
             renderPhotoThumbnails();
             buildSlidesHTML();
+            scheduleAutoSaveToFile();
           });
         });
       }
@@ -3158,11 +3154,38 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           });
         });
 
+        // Bật/tắt biểu tượng Song Hỷ mờ đằng sau tên
+        toggleWatermark.addEventListener("change", () => {
+          state.showWatermark = toggleWatermark.checked;
+          persistConfig();
+          buildSlidesHTML();
+        });
+
+        // Chuyển kiểu hiển thị ngày tháng (Lịch ngang / 1 dòng)
+        document.querySelectorAll(".date-style-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            state.dateStyle = btn.dataset.dateStyle;
+            persistConfig();
+            updateDateStyleUI();
+            buildSlidesHTML();
+            showToast(
+              state.dateStyle === "calendar"
+                ? "Kiểu ngày tháng: Lịch ngang (Mẫu mới)"
+                : "Kiểu ngày tháng: 1 dòng đơn giản"
+            );
+          });
+        });
+
         // Cập nhật trực tiếp khi gõ
         const liveBindings = [
           [inputTitle, "title"],
           [inputBride, "bride"],
           [inputGroom, "groom"],
+          [inputDateMonth, "dateMonth"],
+          [inputDateDay, "dateDay"],
+          [inputDateYear, "dateYear"],
+          [inputDateWeekday, "dateWeekday"],
+          [inputDateLunarShort, "dateLunarShort"],
           [inputSolarDate, "solarDate"],
           [inputLunarDate, "lunarDate"],
           [inputTagline, "tagline"],
@@ -3186,30 +3209,38 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           buildSlidesHTML();
         });
 
+        // Thanh trượt ngang chỉnh cỡ font chữ ngày tháng
+        inputDateFontScale.addEventListener("input", () => {
+          applyDateFontScale(inputDateFontScale.value);
+          persistConfig();
+        });
+
         toggleShowPhotoSlides.addEventListener("change", () => {
           state.showPhotoSlides = toggleShowPhotoSlides.checked;
           persistConfig();
           buildSlidesHTML();
         });
 
-        // Tải ảnh kỷ niệm
+        // Tải nhiều ảnh kỷ niệm
         inputPhotos.addEventListener("change", (e) => {
           const files = Array.from(e.target.files || []);
           if (!files.length) return;
           files.forEach((file) => {
-            const url = URL.createObjectURL(file);
             state.photos.push({
               id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-              url,
+              url: URL.createObjectURL(file),
               name: file.name,
             });
           });
           inputPhotos.value = "";
-          state.showPhotoSlides = true;
-          toggleShowPhotoSlides.checked = true;
+          if (!state.showPhotoSlides) {
+            state.showPhotoSlides = true;
+            toggleShowPhotoSlides.checked = true;
+            persistConfig();
+          }
           renderPhotoThumbnails();
           buildSlidesHTML();
-          activateSlide(2, true);
+          scheduleAutoSaveToFile();
           showToast(`Đã thêm ${files.length} ảnh kỷ niệm vào trình chiếu`);
         });
 
@@ -3220,24 +3251,123 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           state.photos = [];
           renderPhotoThumbnails();
           buildSlidesHTML();
-          showToast("Đã xóa ảnh tải lên, quay về khung minh họa mặc định");
+          scheduleAutoSaveToFile();
+          showToast("Đã xóa ảnh kỷ niệm đã tải");
         });
 
-        // Tải nhạc MP3 riêng
+        // Tải nhạc MP3 riêng (hỗ trợ chọn nhiều bài tạo playlist)
         inputAudio.addEventListener("change", (e) => {
-          const file = (e.target.files || [])[0];
-          if (!file) return;
-          const url = URL.createObjectURL(file);
-          customAudioPlayer.src = url;
-          state.hasCustomAudio = true;
-          clearInterval(synthTimer);
-          audioFileName.textContent = `Đã chọn: ${file.name}`;
-          if (!state.isMusicPlaying) {
-            state.isMusicPlaying = true;
-            updateMusicUI();
+          const files = Array.from(e.target.files || []);
+          if (!files.length) return;
+
+          if (state.audioSourceType !== "uploaded") {
+            state.playlist = [];
+            state.currentTrackIndex = 0;
           }
-          customAudioPlayer.play().catch(() => {});
-          showToast("Đã tải và phát file nhạc nền của bạn");
+
+          const startIdx = state.playlist.length;
+          files.forEach((file) => {
+            state.playlist.push({
+              id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+              name: file.name,
+              url: URL.createObjectURL(file),
+              isBlob: true,
+            });
+          });
+          inputAudio.value = "";
+          state.audioSourceType = "uploaded";
+          playTrackAtIndex(startIdx === 0 ? 0 : startIdx, true);
+          showToast(`Đã thêm ${files.length} bài vào playlist nhạc nền`);
+        });
+
+        btnClearPlaylist.addEventListener("click", () => {
+          resetToBuiltinAudio();
+          showToast("Đã xóa playlist MP3, quay về nhạc nền tích hợp sẵn");
+        });
+
+        // Điều khiển Mini Player trong bảng cài đặt
+        btnAudioPlayPause.addEventListener("click", toggleMusic);
+
+        btnAudioPrev.addEventListener("click", () => {
+          if (!state.playlist.length) {
+            showToast("Chưa có playlist MP3 để chuyển bài.");
+            return;
+          }
+          // Nếu đang phát quá 3 giây thì tua về đầu bài hiện tại, ngược lại lùi sang bài trước
+          if (customAudioPlayer.currentTime > 3) {
+            customAudioPlayer.currentTime = 0;
+            updatePlayerTimeUI();
+          } else {
+            playTrackAtIndex(state.currentTrackIndex - 1, true);
+          }
+        });
+
+        btnAudioNext.addEventListener("click", () => {
+          if (!state.playlist.length) {
+            showToast("Chưa có playlist MP3 để chuyển bài.");
+            return;
+          }
+          playTrackAtIndex(state.currentTrackIndex + 1, true);
+        });
+
+        btnAudioRewind.addEventListener("click", () => seekAudioBy(-10));
+        btnAudioForward.addEventListener("click", () => seekAudioBy(10));
+
+        // Kéo thanh tua thời gian bài hát
+        audioSeekBar.addEventListener("input", () => {
+          isSeekingAudio = true;
+          const val = Number(audioSeekBar.value);
+          playerTimeDisplay.textContent = `${formatAudioTime(val)} / ${formatAudioTime(customAudioPlayer.duration)}`;
+        });
+
+        audioSeekBar.addEventListener("change", () => {
+          if (state.hasCustomAudio && Number.isFinite(customAudioPlayer.duration)) {
+            customAudioPlayer.currentTime = Number(audioSeekBar.value);
+          }
+          isSeekingAudio = false;
+        });
+
+        // Chỉnh âm lượng
+        customAudioPlayer.volume = 0.85;
+        audioVolumeBar.addEventListener("input", () => {
+          const vol = Number(audioVolumeBar.value);
+          customAudioPlayer.volume = vol / 100;
+          audioVolumeLabel.textContent = `${vol}%`;
+        });
+
+        // Cập nhật thanh tiến trình nhạc & tự chuyển bài tiếp theo khi hết bài
+        customAudioPlayer.addEventListener("timeupdate", updatePlayerTimeUI);
+        customAudioPlayer.addEventListener("loadedmetadata", updatePlayerTimeUI);
+        customAudioPlayer.addEventListener("ended", () => {
+          if (!state.playlist.length) return;
+          if (state.playlist.length === 1) {
+            customAudioPlayer.currentTime = 0;
+            customAudioPlayer.play().catch(() => {});
+          } else {
+            playTrackAtIndex(state.currentTrackIndex + 1, true);
+          }
+        });
+
+        // Thay đổi danh sách file nhạc cùng thư mục (vd: nhac-nen.mp3, bai-2.mp3)
+        inputExternalAudio.addEventListener("change", () => {
+          state.externalAudioFile = inputExternalAudio.value.trim() || "nhac-nen.mp3";
+          if (state.audioSourceType === "uploaded") {
+            resetToBuiltinAudio();
+          }
+          persistConfig();
+          loadExternalAudioIfAvailable();
+        });
+
+        // Nút bật nhạc nhanh trên màn hình TV
+        btnStartTvMusic.addEventListener("click", () => {
+          tvMusicBanner.classList.remove("show");
+          if (!state.isMusicPlaying) {
+            toggleMusic();
+          }
+        });
+
+        btnDismissTvMusic.addEventListener("click", () => {
+          tvMusicBanner.classList.remove("show");
         });
 
         // Mật độ hoa rơi
@@ -3261,7 +3391,9 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           persistConfig();
         });
 
-        // Xuất file HTML đi kèm toàn bộ cấu hình & ảnh
+        // Liên kết tự lưu trực tiếp & xuất bản sao file HTML
+        btnLinkAutoSave.addEventListener("click", linkFileForAutoSave);
+        btnUnlinkAutoSave.addEventListener("click", unlinkFileAutoSave);
         btnExportHtml.addEventListener("click", exportProjectHtml);
 
         // Khôi phục mặc định
@@ -3281,6 +3413,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
           renderPhotoThumbnails();
           initAmbientEntities();
           buildSlidesHTML();
+          scheduleAutoSaveToFile();
           showToast("Đã khôi phục toàn bộ cài đặt mặc định");
         });
 
@@ -3344,12 +3477,15 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
          12. KHỞI CHẠY
          ---------------------------------------------------------------------- */
       window.addEventListener("load", () => {
+        btnLockMain.classList.toggle("active-mode", state.isLockedMain);
         syncInputsFromState();
         renderPhotoThumbnails();
+        renderPlaylistUI();
         buildSlidesHTML();
         bindEvents();
         resizeCanvas();
         resetIdleTimer();
+        loadExternalAudioIfAvailable();
         state.lastTickTime = performance.now();
         requestAnimationFrame(drawAmbient);
         requestAnimationFrame(slideshowLoop);
